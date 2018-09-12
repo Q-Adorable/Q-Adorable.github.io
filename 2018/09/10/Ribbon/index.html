@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="客户端负载均衡服务端负载均衡：分为硬件负载均衡和软件负载均衡。软件负载均衡，例如Nginx，通过Nginx进行负载均衡，先发送请求，然后通过负载均衡算法，在多个服务器之间选择一个进行访问；即在服务器端再进行负载均衡算法分配。客户端负载均衡：例如spring cloud中的ribbon，客户端节点会维护着自己要访问的服务端清单，而这些清单来自于服务注册中心，在发送请求前通过负载均衡算法选择一个服务器">
+<meta name="description" content="客户端负载均衡服务端负载均衡：分为硬件负载均衡和软件负载均衡。软件负载均衡，例如Nginx，通过Nginx进行负载均衡，先发送请求，然后通过负载均衡算法，在多个服务器之间选择一个进行访问；即在服务器端再进行负载均衡算法分配。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Ribbon">
 <meta property="og:url" content="http://yoursite.com/2018/09/10/Ribbon/index.html">
 <meta property="og:site_name" content="Adorable">
-<meta property="og:description" content="客户端负载均衡服务端负载均衡：分为硬件负载均衡和软件负载均衡。软件负载均衡，例如Nginx，通过Nginx进行负载均衡，先发送请求，然后通过负载均衡算法，在多个服务器之间选择一个进行访问；即在服务器端再进行负载均衡算法分配。客户端负载均衡：例如spring cloud中的ribbon，客户端节点会维护着自己要访问的服务端清单，而这些清单来自于服务注册中心，在发送请求前通过负载均衡算法选择一个服务器">
+<meta property="og:description" content="客户端负载均衡服务端负载均衡：分为硬件负载均衡和软件负载均衡。软件负载均衡，例如Nginx，通过Nginx进行负载均衡，先发送请求，然后通过负载均衡算法，在多个服务器之间选择一个进行访问；即在服务器端再进行负载均衡算法分配。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-12T15:54:52.975Z">
+<meta property="og:updated_time" content="2018-09-12T16:31:57.487Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ribbon">
-<meta name="twitter:description" content="客户端负载均衡服务端负载均衡：分为硬件负载均衡和软件负载均衡。软件负载均衡，例如Nginx，通过Nginx进行负载均衡，先发送请求，然后通过负载均衡算法，在多个服务器之间选择一个进行访问；即在服务器端再进行负载均衡算法分配。客户端负载均衡：例如spring cloud中的ribbon，客户端节点会维护着自己要访问的服务端清单，而这些清单来自于服务注册中心，在发送请求前通过负载均衡算法选择一个服务器">
+<meta name="twitter:description" content="客户端负载均衡服务端负载均衡：分为硬件负载均衡和软件负载均衡。软件负载均衡，例如Nginx，通过Nginx进行负载均衡，先发送请求，然后通过负载均衡算法，在多个服务器之间选择一个进行访问；即在服务器端再进行负载均衡算法分配。">
 
 
 
@@ -299,7 +299,7 @@
       
 
       
-        <h2 id="客户端负载均衡"><a href="#客户端负载均衡" class="headerlink" title="客户端负载均衡"></a>客户端负载均衡</h2><p>服务端负载均衡：分为硬件负载均衡和软件负载均衡。软件负载均衡，例如Nginx，通过Nginx进行负载均<br>衡，先发送请求，然后通过负载均衡算法，在多个服务器之间选择一个进行访问；即在服务器端再进行负载均衡算法分配。<br>客户端负载均衡：例如spring cloud中的ribbon，客户端节点会维护着自己要访问的服务端清单，而这些<br>清单来自于服务注册中心，在发送请求前通过负载均衡算法选择一个服务器，然后进行访问，这是客户端负载均衡；即在客户端就进行负载均衡算法分配。<br>通过Spring Cloud Ribbon封装，使用客户端负载均衡步骤：</p>
+        <h2 id="客户端负载均衡"><a href="#客户端负载均衡" class="headerlink" title="客户端负载均衡"></a>客户端负载均衡</h2><p>服务端负载均衡：分为硬件负载均衡和软件负载均衡。软件负载均衡，例如Nginx，通过Nginx进行负载均<br>衡，先发送请求，然后通过负载均衡算法，在多个服务器之间选择一个进行访问；即在服务器端再进行负载均衡算法分配。<br><a id="more"></a><br>客户端负载均衡：例如spring cloud中的ribbon，客户端节点会维护着自己要访问的服务端清单，而这些<br>清单来自于服务注册中心，在发送请求前通过负载均衡算法选择一个服务器，然后进行访问，这是客户端负载均衡；即在客户端就进行负载均衡算法分配。<br>通过Spring Cloud Ribbon封装，使用客户端负载均衡步骤：</p>
 <ol>
 <li>服务提供者启动多个服务实例并注册到一个或是多个相关联的服务注册中心。</li>
 <li>服务消费者直接通过调用被@LoadBalanced注解修饰过的RestTemplate来实现面向服务的</li>
