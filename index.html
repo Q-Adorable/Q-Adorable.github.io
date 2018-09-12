@@ -300,7 +300,76 @@
       
         
           
-            
+            <h2 id="客户端负载均衡"><a href="#客户端负载均衡" class="headerlink" title="客户端负载均衡"></a>客户端负载均衡</h2><p>服务端负载均衡：分为硬件负载均衡和软件负载均衡。软件负载均衡，例如Nginx，通过Nginx进行负载均<br>衡，先发送请求，然后通过负载均衡算法，在多个服务器之间选择一个进行访问；即在服务器端再进行负载均衡算法分配。<br>客户端负载均衡：例如spring cloud中的ribbon，客户端节点会维护着自己要访问的服务端清单，而这些<br>清单来自于服务注册中心，在发送请求前通过负载均衡算法选择一个服务器，然后进行访问，这是客户端负载均衡；即在客户端就进行负载均衡算法分配。<br>通过Spring Cloud Ribbon封装，使用客户端负载均衡步骤：</p>
+<ol>
+<li>服务提供者启动多个服务实例并注册到一个或是多个相关联的服务注册中心。</li>
+<li>服务消费者直接通过调用被@LoadBalanced注解修饰过的RestTemplate来实现面向服务的</li>
+</ol>
+<hr>
+<h2 id="RestTemplate详解"><a href="#RestTemplate详解" class="headerlink" title="RestTemplate详解"></a>RestTemplate详解</h2><h4 id="数据的重要性"><a href="#数据的重要性" class="headerlink" title="数据的重要性"></a>数据的重要性</h4><p>关于软件和数据的重要性，更重要的是数据。虽然数据只是软件完成工作时要处理的原材料，但对于实际业务<br>来说，数据是许多业务的生命之血。软件通常是可以替换的，但数据却是多年的积累，不能替换。</p>
+<h4 id="REST流行原因"><a href="#REST流行原因" class="headerlink" title="REST流行原因"></a>REST流行原因</h4><p>以信息为中心的表述性状态转移（Representational State Transfer，REST）被称为替代传统SOAP<br>Web服务的流行方案。SOAP关注的是行为和处理，而REST关注的是要处理的数据。<br>从Spring3.0开始，Spring为创建Rest API提供了良好支持。</p>
+<h4 id="REST基础知识"><a href="#REST基础知识" class="headerlink" title="REST基础知识"></a>REST基础知识</h4><p><a href="http://www.ruanyifeng.com/blog/2011/09/restful.html" target="_blank" rel="noopener">理解RESTful架构</a>  <a href="http://www.ruanyifeng.com/blog/2014/05/restful_api.html" target="_blank" rel="noopener">Restful API 设计指南</a><br>当谈论REST时，有一种常见的错误就是将其视为“基于URL的Web服务”——将REST作为另一种类型的远程过程<br>调用（remote procedure call，RPC）机制，就像SOAP一样，只不过是通过简单的HTTP URL来触发，而不是使用SOAP大量的XML命名空间。恰好相反，REST与RPC几乎没有任何关系。RPC是面向服务的，并关注于行为和动作；而REST 是面向资源的，强调描述应用程序的事物和名词。<br>更简洁地讲，REST就是将资源的状态以最适合客户端或服务端的形式从服务器端转移到客户端（或者反过<br>来）。在REST中，资源通过URL进行识别和定位。至于RESTful URL的结构并没有严格的规则，但是URL应该能够识别资源，而不是简单的发一条命令到服务器上。再次强调，关注的核心是事物，而不是行为。</p>
+<h4 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h4><p>RestTemplate对象会使用Ribbon的自动化配置，通过配置@LoadBalanced还能开启客户端负载均衡。<br>RestTemplate针对不同请求类型和参数类型的服务调用实现：</p>
+<h4 id="2-1-GET请求"><a href="#2-1-GET请求" class="headerlink" title="2.1 GET请求"></a>2.1 GET请求</h4><p>两种方法进行调用实现。</p>
+<h5 id="第一种：getForEntity函数。"><a href="#第一种：getForEntity函数。" class="headerlink" title="第一种：getForEntity函数。"></a>第一种：getForEntity函数。</h5><p>返回ResponseEntity，该对象是Spring对HTTP请求响应的封装，主要存储了HttpStatus,它的父类HttpEntity中存储着HttpHeaders以及范型类型的请求体。<br>getForEntity提供以下三种重载实现：</p>
+<ul>
+<li><p>getForEntity(String url , Class responseType , Object… urlVariables);<br>   {1}是占位符，最后一个参数会替换掉{1}，返回的ResponseEntity对象中的body内容类型会根据第二个参数转换成String类型，urlVariables数组用来顺序匹配url中占位符定义的数字顺序。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">RestTemplate restTemplate = new RestTemplate();</span><br><span class="line">ResponseEntity&lt;String&gt; responseEntity = restTemplate.getForEntity(“http://HELLO-SERVICE/user?name=&#123;1&#125;”,String.class,”didi”);</span><br><span class="line">String name = responseEntity.getBody();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>getForEntity(String url , Class responseType , Map urlVariables);<br>  urlVariables是Map类型，参数绑定是需要传入Map中的key值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">RestTemplate restTemplate = new RestTemplate();</span><br><span class="line">Map&lt;String,String&gt; params = new HashMap&lt;&gt;();</span><br><span class="line">params.put(&quot;name&quot;,&quot;dada&quot;);</span><br><span class="line">ResponseEntity&lt;String&gt; responseEntity = restTemplate.getForEntity(&quot;http://HELLO-SERVICE/user?name=&#123;name&#125;&quot;,String.class,params);</span><br><span class="line">String name = </span><br><span class="line">responseEntity.getBody();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>getForEntity(URL url , Class responseType);</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">RestTemplate restTemplate = new RestTemplate();</span><br><span class="line">UriComponents uriComponents = UriComponentsBuilder</span><br><span class="line">        .fromUriString(&quot;http://HELLO-SERVICE/user?name=&#123;name&#125;&quot;)</span><br><span class="line">        .build()</span><br><span class="line">        .expand(&quot;dodo&quot;)</span><br><span class="line">        .encode();</span><br><span class="line">URI uri = uriComponents.toUri();</span><br><span class="line">ResponseEntity&lt;String&gt; responseEntity = restTemplate.getForEntity(uri,String.class);</span><br><span class="line">String name = responseEntity.getBody();</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h5 id="第二种：getForObject函数。"><a href="#第二种：getForObject函数。" class="headerlink" title="第二种：getForObject函数。"></a>第二种：getForObject函数。</h5><p>对getForEntity进一步封装，通过HttpMessageConverterExtractor对HTTP的请求响应体body内容进行对象转换，实现直接返回包装好的对象内容。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">RestTemplate restTemplate = new RestTemplate();</span><br><span class="line">String result = restTemplate.getForObject(uri, String.class);</span><br></pre></td></tr></table></figure></p>
+<p>getForObject提供了与getForEntity同样的三种重载实现，用法与getForEntity一样。</p>
+<h4 id="2-2-POST请求"><a href="#2-2-POST请求" class="headerlink" title="2.2 POST请求"></a>2.2 POST请求</h4><p>RestTemplate对POST请求可以通过如下三个方法进行调用实现。</p>
+<h5 id="第一种：postForEntity函数。"><a href="#第一种：postForEntity函数。" class="headerlink" title="第一种：postForEntity函数。"></a>第一种：postForEntity函数。</h5><p>postForEntity函数实现三种不同的重载方法。</p>
+<ul>
+<li>postForEntity(String url, Object request, Class responseType, Object…uriVariables)；</li>
+<li>postForEntity(String url, Object request, Class responseType, Map uriVariables)；</li>
+<li>postForEntity(URI url, Object request, Class responseType)；<br>postForEntity的三种重载方法与getForEntity类似，只是多了第二个参数request。这个参数表示上传的参数，该对象可以是一个普通对象，也可以是一个HttpEntity对象。如果是普通对象，RestTemplate会将请求对象转换为一个HttpEntity对象来处理，Object就是request的类型，request内容会被视作完整的body来处理；如果request是一个HttpEntity对象，那就当做一个完整的HTTP请求对象来处理，这时request中不仅包含body内容，还包含了header。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">RestTemplate restTemplate = new RestTemplate();</span><br><span class="line">User user=new User(&quot;didi&quot;,30);</span><br><span class="line">ResponseEntity&lt;User&gt; responseEntity = restTemplate.postForEntity(&quot;http://USER-SERVICE/addUser&quot;,user,User.class);</span><br><span class="line">User body = responseEntity.getBody();</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h5 id="第二种：postForObject函数"><a href="#第二种：postForObject函数" class="headerlink" title="第二种：postForObject函数"></a>第二种：postForObject函数</h5><p>postForObject函数也实现了三种不同的重载方法：</p>
+<ul>
+<li>postForObject(String url, Object request, Class responseType, Object…uriVariables)；</li>
+<li>postForObject(String url, Object request, Class responseType, Map uriVariables)；</li>
+<li>postForObject(URI url, Object request, Class responseType)；<h5 id="第三种：postForLocation函数，实现了以POST请求提交资源，并返回新资源的URI。"><a href="#第三种：postForLocation函数，实现了以POST请求提交资源，并返回新资源的URI。" class="headerlink" title="第三种：postForLocation函数，实现了以POST请求提交资源，并返回新资源的URI。"></a>第三种：postForLocation函数，实现了以POST请求提交资源，并返回新资源的URI。</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">RestTemplate restTemplate = new RestTemplate();</span><br><span class="line">User user=new User(&quot;didi”,40);</span><br><span class="line">URI responseURI = restTemplate.postForLocation(&quot;http://USER-SERVICE/addUser&quot;,user);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>postForLocation函数也实现了三种不同的重载方法：</p>
+<ul>
+<li>postForLocation(String url, Object request, Object…uriVariables)；</li>
+<li>postForLocation(String url, Object request, Map uriVariables)；</li>
+<li>postForLocation(URI url, Object request)；<br>postForLocation直接返回新资源的URI，所以不需要返回类型。</li>
+</ul>
+<h4 id="2-3-PUT请求"><a href="#2-3-PUT请求" class="headerlink" title="2.3 PUT请求"></a>2.3 PUT请求</h4><p>对PUT请求通过put方法调用实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">RestTemplate restTemplate = new RestTemplate();</span><br><span class="line">Long id = 1L;</span><br><span class="line">User user = new User(&quot;didi&quot;,50);</span><br><span class="line">restTemplate.put(&quot;http://USER-SERVICE/user/&#123;1&#125;&quot;,user,id);</span><br></pre></td></tr></table></figure></p>
+<p>put函数也实现了三种重载方法</p>
+<ul>
+<li>put(String url, Object request, Object…uriVariables)；</li>
+<li>put(String url, Object request, Map uriVariables)；</li>
+<li>put(URI url, Object request)；<br>put函数为void类型，没有返回类容，所以没有responseType参数。</li>
+</ul>
+<h4 id="2-4-DELETE请求"><a href="#2-4-DELETE请求" class="headerlink" title="2.4 DELETE请求"></a>2.4 DELETE请求</h4><pre><code>对DELETE请求可以通过delete方法调用实现。
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">RestTemplate restTemplate = new RestTemplate();</span><br><span class="line">Long id= 1L;</span><br><span class="line">restTemplate.delete(&quot;http://USER-SERVICE/users/&#123;1&#125;&quot;,id);</span><br></pre></td></tr></table></figure>
+<p>delete函数也实现了三种重载方法</p>
+<ul>
+<li>delete(String url, Object…uriVariables)；</li>
+<li>delete(String url, Map uriVariables)；</li>
+<li>delete(URI url)；<br>相对于PUT，DELETE请求的唯一标拼接在url中，所以DELETE请求连request的body信息也不需要。</li>
+</ul>
+<h2 id="Ribbon和Feign"><a href="#Ribbon和Feign" class="headerlink" title="Ribbon和Feign"></a>Ribbon和Feign</h2><p>在实践中，会发现Ribbon和Hystrix几乎同时使用，Spring Cloud Feign是对这两个工具更高层次的封装来简化开发。<br>Spring Cloud Feign基于Netflix Feign实现，整合了Spring Cloud Ribbon与Spring Cloud Hystrix，除了提供这两者的功能外，还提供了一种声明式的Web服务端定义方式。<br>RestTemplate实现了对HTTP请求的封装处理，形成了一套模版化的调用方法。在实际开发中，往往一个接口会被多处调用，但是由于RestTemplate的封装，几乎每一个调用都是简单的模版化内容。而Spring Cloud Feign在此基础进行了封装，可以帮助我们定义和实现依赖服务接口的定义，我们只需要创建一个接口并用注解的方式来配置它，即可完成对服务提供方的接口绑定。<br>Feign优点：</p>
+<ul>
+<li>可以简化在使用Ribbon时自行封装服务调用客户端的开发量。</li>
+<li>具备可插拔的注解支持，包括Feign注解和JAX-RS注解。</li>
+<li>在Netflix Feign的基础上扩展了对Spring MVC的注解的支持。</li>
+<li>对自身的主要组件，如编码器和解码器，以插拔的方式提供，方便在有需求的时候扩展和替换。</li>
+</ul>
+<p>JAX-RS注解：<a href="https://blog.csdn.net/u013628152/article/details/42708555" target="_blank" rel="noopener">JAX-RS规范-常用注解浅析</a>  <a href="https://blog.csdn.net/senssic/article/details/21706311" target="_blank" rel="noopener">JAX-RS注解的使用</a></p>
+
           
         
       
