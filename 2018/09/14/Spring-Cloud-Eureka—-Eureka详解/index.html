@@ -88,7 +88,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2018/09/14/Spring-Cloud-Eureka—-Eureka详解/Eureka元素通信行为.png">
 <meta property="og:image" content="http://yoursite.com/2018/09/14/Spring-Cloud-Eureka—-Eureka详解/2.png">
-<meta property="og:updated_time" content="2018-09-13T16:37:27.537Z">
+<meta property="og:updated_time" content="2018-09-13T16:50:28.850Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Cloud Eureka— Eureka详解">
 <meta name="twitter:description" content="前情提要：Eureka服务治理体系中的三个核心角色：服务注册中心、服务提供者和服务消费者。引入原因：在实践中，系统结构非常复杂，简单的服务治理内容将无法满足需求。所以需要根据实际情况做一些配置、调整和扩展。 基础架构Eureka服务治理架构的三个核心要素：  服务注册中心：Eureka提供的服务端，提供服务注册与发现功能，如前面的eureka-server。 服务提供者：提供服务的应用，可以是Sp">
@@ -302,15 +302,12 @@
       
 
       
-        <p>前情提要：Eureka服务治理体系中的三个核心角色：服务注册中心、服务提供者和服务消费者。<br>引入原因：在实践中，系统结构非常复杂，简单的服务治理内容将无法满足需求。所以需要根据实际情况做一些配置、调<br>整和扩展。</p>
+        <p>前情提要：Eureka服务治理体系中的三个核心角色：服务注册中心、服务提供者和服务消费者。<br>引入原因：在实践中，系统结构非常复杂，简单的服务治理内容将无法满足需求。所以需要根据实际情况做一些配置、调整和扩展。</p>
 <h2 id="基础架构"><a href="#基础架构" class="headerlink" title="基础架构"></a>基础架构</h2><pre><code>Eureka服务治理架构的三个核心要素：
 </code></pre><ul>
 <li>服务注册中心：Eureka提供的服务端，提供服务注册与发现功能，如前面的eureka-server。</li>
 <li>服务提供者：提供服务的应用，可以是Spring Boot应用，也可以是其他技术平台且遵循Eureka通信机制的应用。<br>将自己的服务注册到Eureka，以供其他应用发现，如前面的hello-service。</li>
-<li>服务消费者：从服务注册中心获取服务列表，从而使消费者可以知道去何处调用其所需的服务，可以使用Ribbon或<br>Feign来实现服务消费，如前面的ribbon-service。</li>
-</ul>
-<h2 id="服务治理机制"><a href="#服务治理机制" class="headerlink" title="服务治理机制"></a>服务治理机制</h2><p>了解Eureka基础架构中各个元素的一些通信行为，以此理解基于Eureka实现的服务治理体系是如何运作起来的。如图：</p>
-<ul>
+<li>服务消费者：从服务注册中心获取服务列表，从而使消费者可以知道去何处调用其所需的服务，可以使用Ribbon或<br>Feign来实现服务消费，如前面的ribbon-service。<h2 id="服务治理机制"><a href="#服务治理机制" class="headerlink" title="服务治理机制"></a>服务治理机制</h2>了解Eureka基础架构中各个元素的一些通信行为，以此理解基于Eureka实现的服务治理体系是如何运作起来的。如图：</li>
 <li>“服务注册中心-1”和“服务注册中心-2”，它们相互注册组成了高可用集群。</li>
 <li>“服务提供者”启动两个实例，一个注册到“服务注册中心-1”上，一个注册到“服务注册中心-2”上。</li>
 <li>两个“服务消费者”都分别指向一个注册中心。<img src="/2018/09/14/Spring-Cloud-Eureka—-Eureka详解/Eureka元素通信行为.png" title="图1 Eureka元素通信行为">
@@ -355,6 +352,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/14/Spring-Cloud-Eureka—配置详解/" rel="prev" title="Spring Cloud Eureka—配置详解">
+                Spring Cloud Eureka—配置详解 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -431,7 +432,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
