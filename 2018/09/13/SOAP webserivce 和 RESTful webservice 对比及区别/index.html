@@ -86,15 +86,15 @@
 <meta property="og:site_name" content="Adorable">
 <meta property="og:description" content="简单对象访问协议（Simple Object Access Protocol，SOAP）是一种基于 XML 的协议，可以和现存的许多因特网协议和格式结合使用，包括HTTP、SMTP、MIME，基于“通用”传输协议是 SOAP的一个优点。它还支持从消息系统到远程过程调用（Remote Procedure Call，RPC）等大量的应用程序。SOAP提供了一系列的标准，如WSRM（WS-Reliabl">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2018/09/1.jpg">
-<meta property="og:image" content="http://yoursite.com/2018/09/images/2.jpg">
-<meta property="og:image" content="http://yoursite.com/2018/09/images/3.jpg">
-<meta property="og:image" content="http://yoursite.com/2018/09/images/4.jpg">
-<meta property="og:updated_time" content="2018-09-12T17:20:15.439Z">
+<meta property="og:image" content="http://yoursite.com/images/1.jpg">
+<meta property="og:image" content="http://yoursite.com/images/2.jpg">
+<meta property="og:image" content="http://yoursite.com/images/3.jpg">
+<meta property="og:image" content="http://yoursite.com/images/4.jpg">
+<meta property="og:updated_time" content="2018-09-13T05:41:58.386Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SOAP webserivce 和 RESTful webservice 对比及区别">
 <meta name="twitter:description" content="简单对象访问协议（Simple Object Access Protocol，SOAP）是一种基于 XML 的协议，可以和现存的许多因特网协议和格式结合使用，包括HTTP、SMTP、MIME，基于“通用”传输协议是 SOAP的一个优点。它还支持从消息系统到远程过程调用（Remote Procedure Call，RPC）等大量的应用程序。SOAP提供了一系列的标准，如WSRM（WS-Reliabl">
-<meta name="twitter:image" content="http://yoursite.com/2018/09/1.jpg">
+<meta name="twitter:image" content="http://yoursite.com/images/1.jpg">
 
 
 
@@ -311,14 +311,14 @@
 <h3 id="对比SOAP和REST："><a href="#对比SOAP和REST：" class="headerlink" title="对比SOAP和REST："></a>对比SOAP和REST：</h3><h5 id="安全控制方面"><a href="#安全控制方面" class="headerlink" title="安全控制方面"></a>安全控制方面</h5><ul>
 <li>场景：<br>  有两个客户端Client1和Client2，对于客户端 Client2，我们只希望它能以只读的方式访问 User 和 User List 资源，而 Client1 具有访问所有资源的所有权限。 </li>
 <li>通用解决方案：<br>  通行的做法是：所有从客户端 Client2 发出的 HTTP 请求都经过代理服务器 (Proxy Server)。代理服务器制定安全策略：所有经过该代理的访问 User 和 User List 资源的请求只具有读取权限，即：允许 GET/HEAD 操作，而像具有写权限的 PUT/DELTE 是不被允许的。 </li>
-<li><p>对于 REST，安全策略部署方式，如下图所示：<br><img src="../../1.jpg"><br>图 1. REST 与代理服务器 (Proxy Servers)</p>
+<li><p>对于 REST，安全策略部署方式，如下图所示：<br><img src="../../../../images/1.jpg"><br>图1. REST 与代理服务器 (Proxy Servers)</p>
 <p>  一般代理服务器的实现根据 (URI, HTTP Method) 两元组来决定 HTTP 请求的安全合法性。 当发现类似于（<a href="http://localhost:8182/v1/users/{username}，DELETE）这样的请求时，予以拒绝。" target="_blank" rel="noopener">http://localhost:8182/v1/users/{username}，DELETE）这样的请求时，予以拒绝。</a></p>
 </li>
-<li>对于 SOAP，如果想借助于既有的代理服务器进行安全控制，会比较尴尬，如下图：<br><img src="../../images/2.jpg" alt="2"><br>图 2. SOAP 与代理服务器 (Proxy Servers)<br> 所有的 SOAP 消息经过代理服务器，只能看到（ <a href="http://localhost:8182/v1/soap/servlet/messagerouter" target="_blank" rel="noopener">http://localhost:8182/v1/soap/servlet/messagerouter</a> , HTTP POST）这样的信息，如果代理服务器想知道当前的 HTTP 请求具体做的是什么，必须对 SOAP 的消息体解码，这样的话，意味着要求第三方的代理服务器需要理解当前的 SOAP 消息语义，而这种 SOAP 应用与代理服务器之间的紧耦合关系是不合理的。 <h5 id="缓存方面"><a href="#缓存方面" class="headerlink" title="缓存方面"></a>缓存方面</h5></li>
+<li>对于 SOAP，如果想借助于既有的代理服务器进行安全控制，会比较尴尬，如下图：<br><img src="../../../../images/2.jpg"><br>图2. SOAP 与代理服务器 (Proxy Servers)<br> 所有的 SOAP 消息经过代理服务器，只能看到（ <a href="http://localhost:8182/v1/soap/servlet/messagerouter" target="_blank" rel="noopener">http://localhost:8182/v1/soap/servlet/messagerouter</a> , HTTP POST）这样的信息，如果代理服务器想知道当前的 HTTP 请求具体做的是什么，必须对 SOAP 的消息体解码，这样的话，意味着要求第三方的代理服务器需要理解当前的 SOAP 消息语义，而这种 SOAP 应用与代理服务器之间的紧耦合关系是不合理的。 <h5 id="缓存方面"><a href="#缓存方面" class="headerlink" title="缓存方面"></a>缓存方面</h5></li>
 <li>背景<br>  对于基于网络的分布式应用，网络传输是一个影响应用性能的重要因素。如何使用缓存来节省网络传输带来的开销，这是每一个构建分布式网络应用的开发人员必须考虑的问题。 HTTP 协议带条件的 HTTP GET 请求 (Conditional GET) 被设计用来节省客户端与服务器之间网络传输带来的开销，这也给客户端实现 Cache 机制 ( 包括在客户端与服务器之间的任何代理 ) 提供了可能。HTTP 协议通过 HTTP HEADER 域：If-Modified-Since/Last- Modified，If-None-Match/ETag 实现带条件的 GET 请求。</li>
-<li><p>对于REST<br>  REST 的应用可以充分地利用 HTTP 协议对缓存支持的能力。当客户端第一次发送 HTTP GET 请求给服务器获得内容后，该内容可能被缓存服务器 (Cache Server) 缓存。当下一次客户端请求同样的资源时，缓存可以直接给出响应，而不需要请求远程的服务器获得。而这一切对客户端来说都是透明的。如图3:<br><img src="../../images/3.jpg" alt="3"><br>图 3. REST 与缓存服务器 (Cache Server) </p>
+<li><p>对于REST<br>  REST 的应用可以充分地利用 HTTP 协议对缓存支持的能力。当客户端第一次发送 HTTP GET 请求给服务器获得内容后，该内容可能被缓存服务器 (Cache Server) 缓存。当下一次客户端请求同样的资源时，缓存可以直接给出响应，而不需要请求远程的服务器获得。而这一切对客户端来说都是透明的。如图3:<br><img src="../../../../images/3.jpg"><br>图 3. REST 与缓存服务器 (Cache Server) </p>
 </li>
-<li><p>对于SOAP<br>  使用 HTTP 协议的 SOAP，由于其设计原则上并不像 REST 那样强调与 Web 的工作方式相一致，所以，基于 SOAP 应用很难充分发挥 HTTP 本身的缓存能力。如图4:<br><img src="../../images/4.jpg" alt="4"><br>图 4. SOAP 与缓存服务器 (Cache Server) </p>
+<li><p>对于SOAP<br>  使用 HTTP 协议的 SOAP，由于其设计原则上并不像 REST 那样强调与 Web 的工作方式相一致，所以，基于 SOAP 应用很难充分发挥 HTTP 本身的缓存能力。如图4:<br><img src="../../../../images/4.jpg"><br>图 4. SOAP 与缓存服务器 (Cache Server) </p>
 </li>
 <li>两个因素决定了基于 SOAP 应用的缓存机制要远比 REST 复杂：<br>  其一、所有经过缓存服务器的 SOAP 消息总是 HTTP POST，缓存服务器如果不解码 SOAP 消息体，没法知道该 HTTP 请求是否是想从服务器获得数据。<br>  其二、SOAP 消息所使用的 URI 总是指向 SOAP 的服务器，这并没有表达真实的资源 URI，其结果是缓存服务器根本不知道那个资源正在被请求，更不用说进行缓存处理。<h5 id="连接性"><a href="#连接性" class="headerlink" title="连接性"></a>连接性</h5></li>
 <li>SOAP<br>  在一个纯的 SOAP 应用中，URI 本质上除了用来指示 SOAP 服务器外，本身没有任何意义。与 REST 不同的是，无法通过 URI 驱动 SOAP 方法调用。例如在上面的例子中，当我们通过 getUserList SOAP 消息获得所有的用户列表后，仍然无法通过既有的信息得到某个具体的用户信息。唯一的方法只有通过 WSDL 的指示，通过调用 getUserByName 获得，getUserList 与 getUserByName 是彼此孤立的。</li>
