@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="根据Netflix Hystrix流程图来详细了解：当一个请求调用了相关服务依赖之后Hystrix工作流程（即当访问了http://localhost:9000/ribbon-consumer请求之后，在RIBBON-CONSUMER中是如何处理的） 工作流程  创建 HystrixCommand 或 HystrixObservableCommand 对象首先，创建一个 HystrixComman">
+<meta name="description" content="根据Netflix Hystrix流程图来详细了解：当一个请求调用了相关服务依赖之后Hystrix工作流程（即当访问了http://localhost:9000/ribbon-consumer 请求之后，在RIBBON-CONSUMER中是如何处理的） 工作流程  创建 HystrixCommand 或 HystrixObservableCommand 对象首先，创建一个 HystrixComma">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spring Cloud Hystrix——原理分析">
 <meta property="og:url" content="http://yoursite.com/2018/09/17/Spring-Cloud-Hystrix——原理分析/index.html">
 <meta property="og:site_name" content="Adorable">
-<meta property="og:description" content="根据Netflix Hystrix流程图来详细了解：当一个请求调用了相关服务依赖之后Hystrix工作流程（即当访问了http://localhost:9000/ribbon-consumer请求之后，在RIBBON-CONSUMER中是如何处理的） 工作流程  创建 HystrixCommand 或 HystrixObservableCommand 对象首先，创建一个 HystrixComman">
+<meta property="og:description" content="根据Netflix Hystrix流程图来详细了解：当一个请求调用了相关服务依赖之后Hystrix工作流程（即当访问了http://localhost:9000/ribbon-consumer 请求之后，在RIBBON-CONSUMER中是如何处理的） 工作流程  创建 HystrixCommand 或 HystrixObservableCommand 对象首先，创建一个 HystrixComma">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2018/09/17/Spring-Cloud-Hystrix——原理分析/1.png">
-<meta property="og:updated_time" content="2018-09-17T15:23:22.617Z">
+<meta property="og:updated_time" content="2018-09-17T15:28:04.977Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Cloud Hystrix——原理分析">
-<meta name="twitter:description" content="根据Netflix Hystrix流程图来详细了解：当一个请求调用了相关服务依赖之后Hystrix工作流程（即当访问了http://localhost:9000/ribbon-consumer请求之后，在RIBBON-CONSUMER中是如何处理的） 工作流程  创建 HystrixCommand 或 HystrixObservableCommand 对象首先，创建一个 HystrixComman">
+<meta name="twitter:description" content="根据Netflix Hystrix流程图来详细了解：当一个请求调用了相关服务依赖之后Hystrix工作流程（即当访问了http://localhost:9000/ribbon-consumer 请求之后，在RIBBON-CONSUMER中是如何处理的） 工作流程  创建 HystrixCommand 或 HystrixObservableCommand 对象首先，创建一个 HystrixComma">
 <meta name="twitter:image" content="http://yoursite.com/2018/09/17/Spring-Cloud-Hystrix——原理分析/1.png">
 
 
@@ -301,7 +301,7 @@
       
 
       
-        <p>根据Netflix Hystrix流程图来详细了解：当一个请求调用了相关服务依赖之后Hystrix工作流程（即当访问了<a href="http://localhost:9000/ribbon-consumer请求之后，在RIBBON-CONSUMER中是如何处理的）" target="_blank" rel="noopener">http://localhost:9000/ribbon-consumer请求之后，在RIBBON-CONSUMER中是如何处理的）</a></p>
+        <p>根据Netflix Hystrix流程图来详细了解：当一个请求调用了相关服务依赖之后Hystrix工作流程（即当访问了<a href="http://localhost:9000/ribbon-consumer" target="_blank" rel="noopener">http://localhost:9000/ribbon-consumer</a> 请求之后，在RIBBON-CONSUMER中是如何处理的）</p>
 <h4 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h4><img src="/2018/09/17/Spring-Cloud-Hystrix——原理分析/1.png" title="图1 Hystrix工作流程图">
 <ol>
 <li>创建 HystrixCommand 或 HystrixObservableCommand 对象<br>首先，创建一个 HystrixCommand 或 HystrixObservableCommand 对象，用来表示对依赖服务的操作请求，同时传递所有需要的参数。从其命名中我们就能知道它采用了“命令模式” 来实现服务调用操作的封装。而这两个 Command 对象分别针对不同的应用场景。<ul>
