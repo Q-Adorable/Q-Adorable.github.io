@@ -79,17 +79,19 @@
 
 
 
-<meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta name="description" content="根据Netflix Hystrix流程图来详细了解：当一个请求调用了相关服务依赖之后Hystrix工作流程（即当访问了http://localhost:9000/ribbon-consumer请求之后，在RIBBON-CONSUMER中是如何处理的） 工作流程  创建 HystrixCommand 或 HystrixObservableCommand 对象首先，创建一个 HystrixComman">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://yoursite.com/2018/09/10/hello-world/index.html">
+<meta property="og:title" content="Spring Cloud Hystrix——原理分析">
+<meta property="og:url" content="http://yoursite.com/2018/09/17/Spring-Cloud-Hystrix——原理分析/index.html">
 <meta property="og:site_name" content="Adorable">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:description" content="根据Netflix Hystrix流程图来详细了解：当一个请求调用了相关服务依赖之后Hystrix工作流程（即当访问了http://localhost:9000/ribbon-consumer请求之后，在RIBBON-CONSUMER中是如何处理的） 工作流程  创建 HystrixCommand 或 HystrixObservableCommand 对象首先，创建一个 HystrixComman">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-10T07:34:48.843Z">
+<meta property="og:image" content="http://yoursite.com/2018/09/17/Spring-Cloud-Hystrix——原理分析/1.png">
+<meta property="og:updated_time" content="2018-09-17T15:23:22.617Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hello World">
-<meta name="twitter:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta name="twitter:title" content="Spring Cloud Hystrix——原理分析">
+<meta name="twitter:description" content="根据Netflix Hystrix流程图来详细了解：当一个请求调用了相关服务依赖之后Hystrix工作流程（即当访问了http://localhost:9000/ribbon-consumer请求之后，在RIBBON-CONSUMER中是如何处理的） 工作流程  创建 HystrixCommand 或 HystrixObservableCommand 对象首先，创建一个 HystrixComman">
+<meta name="twitter:image" content="http://yoursite.com/2018/09/17/Spring-Cloud-Hystrix——原理分析/1.png">
 
 
 
@@ -119,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/09/10/hello-world/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/09/17/Spring-Cloud-Hystrix——原理分析/"/>
 
 
 
 
 
-  <title>Hello World | Adorable</title>
+  <title>Spring Cloud Hystrix——原理分析 | Adorable</title>
   
 
 
@@ -232,7 +234,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/10/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/17/Spring-Cloud-Hystrix——原理分析/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Xin Qi">
@@ -249,7 +251,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Hello World</h1>
+          <h1 class="post-title" itemprop="name headline">Spring Cloud Hystrix——原理分析</h1>
         
 
         <div class="post-meta">
@@ -261,8 +263,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-10T15:34:48+08:00">
-                2018-09-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-17T22:19:17+08:00">
+                2018-09-17
               </time>
             
 
@@ -299,15 +301,23 @@
       
 
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+        <p>根据Netflix Hystrix流程图来详细了解：当一个请求调用了相关服务依赖之后Hystrix工作流程（即当访问了<a href="http://localhost:9000/ribbon-consumer请求之后，在RIBBON-CONSUMER中是如何处理的）" target="_blank" rel="noopener">http://localhost:9000/ribbon-consumer请求之后，在RIBBON-CONSUMER中是如何处理的）</a></p>
+<h4 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h4><img src="/2018/09/17/Spring-Cloud-Hystrix——原理分析/1.png" title="图1 Hystrix工作流程图">
+<ol>
+<li>创建 HystrixCommand 或 HystrixObservableCommand 对象<br>首先，创建一个 HystrixCommand 或 HystrixObservableCommand 对象，用来表示对依赖服务的操作请求，同时传递所有需要的参数。从其命名中我们就能知道它采用了“命令模式” 来实现服务调用操作的封装。而这两个 Command 对象分别针对不同的应用场景。<ul>
+<li>HystrixCommand ：用在依赖的服务返回单个操作结果的时候。</li>
+<li>HystrixObservableCommand ：用在依赖的服务返回多个操作结果的时候。<br>ps:<br>命令模式，将来自客户端的请求封装成一个对象，从而让你可以使用不同的请求对客户端进行参数化。它可以被用于实现“行为请求者” 与 “行为实现者” 的解耦，以便使两者可以适应变化。下面的示例是对命令模式的简单实现：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">// 接收者</span><br><span class="line">public class Receiver &#123;</span><br><span class="line">    public void action()&#123;</span><br><span class="line">        //真正的业务逻辑</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//抽象命令</span><br><span class="line">public interface Command &#123;</span><br><span class="line">    void excute();</span><br><span class="line">&#125;</span><br><span class="line">//具体命令实现</span><br><span class="line">public class ConcreteCommand implements Command &#123;</span><br><span class="line">    private Receiver receiver;</span><br><span class="line">    public ConcreteCommand(Receiver receiver) &#123;</span><br><span class="line">        this.receiver = receiver;</span><br><span class="line">    &#125;</span><br><span class="line">    @Override</span><br><span class="line">    public void excute() &#123;</span><br><span class="line">        this.receiver.action();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//客户端调用</span><br><span class="line">public class Invoker &#123;</span><br><span class="line">    private Command command;</span><br><span class="line">    public void setCommand(Command command) &#123;</span><br><span class="line">        this.command = command;</span><br><span class="line">    &#125;</span><br><span class="line">    public void  action ()&#123;</span><br><span class="line">        command.excute();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">public class Client &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Receiver receiver = new Receiver();</span><br><span class="line">        Command command = new ConcreteCommand(receiver);</span><br><span class="line">        Invoker invoker = new Invoker();</span><br><span class="line">        invoker.setCommand(command);</span><br><span class="line">        invoker.action(); //客户端通过调用者来执行命令</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<p>从代码中，可以看到这样几个对象。</p>
+<ul>
+<li>Receiver：接收者，它知道如何处理具体的业务逻辑。</li>
+<li>Command：抽象命令，它定义了一个命令对象应具备的一系列命令操作，比如 execute()、undo()、redo() 等。当命令操作被调用的时候就会触发接收者去做具体命令对应的业务逻辑。</li>
+<li>ConcreteCommand：具体的命令实现，在这里它绑定了命令操作与接收者之间的关系，execute() 命令的实现委托给了 Receiver 的 action() 函数。</li>
+<li>Invoker：调用者，它持有一个命令对象，并且可以在需要的时候通过命令对象完成具体的业务逻辑。</li>
+</ul>
 
       
     </div>
@@ -332,15 +342,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2018/09/16/Spring-Cloud-Hystrix——快速入门/" rel="next" title="Spring Cloud Hystrix——快速入门">
+                <i class="fa fa-chevron-left"></i> Spring Cloud Hystrix——快速入门
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/10/Ribbon/" rel="prev" title="Ribbon">
-                Ribbon <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -454,7 +464,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick-Start"><span class="nav-number">1.</span> <span class="nav-text">Quick Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-a-new-post"><span class="nav-number">1.1.</span> <span class="nav-text">Create a new post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run-server"><span class="nav-number">1.2.</span> <span class="nav-text">Run server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generate-static-files"><span class="nav-number">1.3.</span> <span class="nav-text">Generate static files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deploy-to-remote-sites"><span class="nav-number">1.4.</span> <span class="nav-text">Deploy to remote sites</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#工作流程"><span class="nav-number">1.</span> <span class="nav-text">工作流程</span></a></li></ol></div>
             
 
           </div>
