@@ -87,7 +87,7 @@
 <meta property="og:description" content="根据Netflix Hystrix流程图来详细了解：当一个请求调用了相关服务依赖之后Hystrix工作流程（即当访问了http://localhost:9000/ribbon-consumer 请求之后，在RIBBON-CONSUMER中是如何处理的） 工作流程  创建 HystrixCommand 或 HystrixObservableCommand 对象首先，创建一个 HystrixComma">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2018/09/17/Spring-Cloud-Hystrix——原理分析/1.png">
-<meta property="og:updated_time" content="2018-09-17T15:28:04.977Z">
+<meta property="og:updated_time" content="2018-09-19T16:18:35.142Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Cloud Hystrix——原理分析">
 <meta name="twitter:description" content="根据Netflix Hystrix流程图来详细了解：当一个请求调用了相关服务依赖之后Hystrix工作流程（即当访问了http://localhost:9000/ribbon-consumer 请求之后，在RIBBON-CONSUMER中是如何处理的） 工作流程  创建 HystrixCommand 或 HystrixObservableCommand 对象首先，创建一个 HystrixComma">
@@ -316,7 +316,30 @@
 <li>Receiver：接收者，它知道如何处理具体的业务逻辑。</li>
 <li>Command：抽象命令，它定义了一个命令对象应具备的一系列命令操作，比如 execute()、undo()、redo() 等。当命令操作被调用的时候就会触发接收者去做具体命令对应的业务逻辑。</li>
 <li>ConcreteCommand：具体的命令实现，在这里它绑定了命令操作与接收者之间的关系，execute() 命令的实现委托给了 Receiver 的 action() 函数。</li>
-<li>Invoker：调用者，它持有一个命令对象，并且可以在需要的时候通过命令对象完成具体的业务逻辑。</li>
+<li>Invoker：调用者，它持有一个命令对象，并且可以在需要的时候通过命令对象完成具体的业务逻辑。<ol start="2">
+<li>命令执行<br>从图中可以看出有4中方式可以执行一个Hystrix命令。<br>对于HystrixCommand有4个执行方法<br>对于HystrixObservableCommand只有后两个</li>
+</ol>
+</li>
+<li>execute():同步，阻塞方法，从依赖服务中返回一个单一的结果对象，或是在发生错误时抛出异常。其实就是调用了queue().get()。</li>
+<li>queue():异步，非阻塞方法，直接返回Future对象，其中包含了服务执行结束时要返回的单一结果对象。可以先做自己的事情，做完再.get()</li>
+<li>observe():订阅一个从依赖请求中返回的代表响应的Observable对象。</li>
+<li>toObservable():返回一个Observable对象，只有当你订阅它时，它才会执行Hystrix命令并发射响应。<br>同步调用方法execute()实际上就是调用queue().get()方法，queue()方法的调用的是toObservable().toBlocking().toFuture().也就是说，最终每一个HystrixCommand都是通过Observable来实现的，即使这些命令仅仅是返回一个简单的单个值。<ol start="3">
+<li>结果是否被缓存<br>若当前命令的请求缓存功能已经开启，并且对于该请求的响应也在缓存中，那么缓存的结果会立即以 Observable 对象的形式返回。</li>
+<li>回路器是否打开<br>当命令执行执行时，Hystrix会检查回路器是否被打开。</li>
+</ol>
+</li>
+<li>如果回路器被打开（或者tripped），那么Hystrix就不会再执行命令，而是转接到fallback处理逻辑（对应第8步）。</li>
+<li>如果回路器关闭，那么将进入第5步，检查是否有足够的容量来执行任务。（其中容量包括线程池的容量，队列的容量等等）。<ol start="5">
+<li>线程池/请求队列/信号量是否已满<br>如果与该命令相关的线程池、请求队列，或者信号量（不使用线程池的时候）已经被占满了，那么Hystrix就不会再执行命令，而是转接到fallback处理逻辑。<br>注意：此处的线程池并非容器的线程池，而是每个依赖服务的专有线程池。Hystrix 为了保证不会因为某个依赖服务的问题影响到其他依赖服务而采用了 “舱壁模式” （Bulkhead Pattern）来隔离每个依赖的服务。</li>
+<li>HystrixObservableCommand.construct() 或 HystrixCommand.run()<br>Hystrix 会根据编写的方法来决定采取什么样的方式去请求依赖服务。</li>
+</ol>
+</li>
+<li>HystrixCommand.run() ：返回一个单一的结果，或者抛出异常。</li>
+<li>HystrixObservableCommand.construct()：返回一个 Observable 对象来发射多个结果，或通过 onError 发送错误通知。<br>如果 run() 或 construct() 方法的执行时间超过了命令设置的超时阈值，当前处理线程会抛出 TimeoutException。这种情况下，也会跳转到 fallback 处理逻辑。<ol start="7">
+<li>计算回路器的健康度<br>Hystrix记录了成功，失败，拒绝，超时四种报告<br>这些报告用于决定哪些用于断路，被断路的点在恢复周期内无法被后来的请求访问到。</li>
+<li>fallback处理</li>
+</ol>
+</li>
 </ul>
 
       
