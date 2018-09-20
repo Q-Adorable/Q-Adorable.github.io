@@ -89,7 +89,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/09/17/Spring-Cloud-Hystrix——原理分析/1.png">
 <meta property="og:image" content="http://yoursite.com/2018/09/17/Spring-Cloud-Hystrix——原理分析/2.png">
 <meta property="og:image" content="http://yoursite.com/2018/09/17/Spring-Cloud-Hystrix——原理分析/3.png">
-<meta property="og:updated_time" content="2018-09-20T14:29:41.597Z">
+<meta property="og:updated_time" content="2018-09-20T14:32:37.854Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Cloud Hystrix——原理分析">
 <meta name="twitter:description" content="根据Netflix Hystrix流程图来详细了解：当一个请求调用了相关服务依赖之后Hystrix工作流程（即当访问了http://localhost:9000/ribbon-consumer 请求之后，在RIBBON-CONSUMER中是如何处理的） 工作流程 创建 HystrixCommand 或 HystrixObservableCommand 对象首先，创建一个 HystrixComman">
@@ -330,16 +330,22 @@
 <li>第6步，当construct()或者run()方法执行过程中抛出异常。</li>
 <li>命令执行超时<br>写一个fallback方法，提供一个不需要网络依赖的通用响应，从内存缓存或者其他的静态逻辑获取数据。如果在fallback内必须需要网络的调用，那么该调用请求也必须被包装在HystrixCommand或者HystrixObservableCommand。</li>
 <li>如果你的命令是继承自HystrixCommand，那么可以通过实现HystrixCommand.getFallback()方法返回一个单个的fallback值。</li>
-<li>如果你的命令是继承自HystrixObservableCommand，那么可以通过实现HystrixObservableCommand.resumeWithFallback()方法返回一个Observable，并且该Observable能够发射出一个fallback值。<br>Hystrix会把fallback方法返回的响应返回给调用者。<br>如果你没有为你的命令实现fallback方法，那么当命令抛出异常时，Hystrix仍然会返回一个Observable，但是该Observable并不会发射任何的数据，并且会立即终止并调用onError()通知。通过这个onError通知，可以将造成该命令抛出异常的原因返回给调用者。<br><code>失败或不存在回退的结果将根据您如何调用Hystrix命令而有所不同：</code></li>
+<li>如果你的命令是继承自HystrixObservableCommand，那么可以通过实现HystrixObservableCommand.resumeWithFallback()方法返回一个Observable，并且该Observable能够发射出一个fallback值。<br>Hystrix会把fallback方法返回的响应返回给调用者。<br>如果你没有为你的命令实现fallback方法，那么当命令抛出异常时，Hystrix仍然会返回一个Observable，但是该Observable并不会发射任何的数据，并且会立即终止并调用onError()通知。通过这个onError通知，可以将造成该命令抛出异常的原因返回给调用者。</li>
+</ul>
+<p>失败或不存在回退的结果将根据您如何调用Hystrix命令而有所不同：</p>
+<ul>
 <li>execute()：抛出一个异常。</li>
 <li>queue()：成功返回一个Future，但是如果调用get()方法，将会抛出一个异常。</li>
 <li>observe()：返回一个Observable，当你订阅它时，它将立即终止，并调用onError()方法。</li>
-<li>toObservable()：返回一个Observable，当你订阅它时，它将立即终止，并调用onError()方法。<h4 id="返回成功的响应"><a href="#返回成功的响应" class="headerlink" title="返回成功的响应"></a>返回成功的响应</h4>如果Hystrix命令执行成功，它会将处理结果直接返回或是以Observable形式返回响应给调用者。根据你在第2步的调用方式不同，在返回Observablez之前可能会做一些转换。<img src="/2018/09/17/Spring-Cloud-Hystrix——原理分析/2.png" title="图2"></li>
+<li>toObservable()：返回一个Observable，当你订阅它时，它将立即终止，并调用onError()方法。<h4 id="返回成功的响应"><a href="#返回成功的响应" class="headerlink" title="返回成功的响应"></a>返回成功的响应</h4>如果Hystrix命令执行成功，它会将处理结果直接返回或是以Observable形式返回响应给调用者。根据你在第2步的调用方式不同，在返回Observablez之前可能会做一些转换。<img src="/2018/09/17/Spring-Cloud-Hystrix——原理分析/2.png" title="图2">
+<ul>
 <li>execute()：通过调用queue()来得到一个Future对象，然后调用get()方法来获取Future中包含的值。</li>
 <li>queue()：将Observable转换成BlockingObservable，在将BlockingObservable转换成一个Future。</li>
 <li>observe()：订阅返回的Observable，并且立即开始执行命令的逻辑，</li>
 <li>toObservable()：返回一个没有改变的Observable，你必须订阅它，它才能够开始执行命令的逻辑。<h3 id="依赖隔离"><a href="#依赖隔离" class="headerlink" title="依赖隔离"></a>依赖隔离</h3>舱壁模式（bulkhead pattern）：一般情况我们都用一个线程池来管理所有线程，容易造成一个问题，粒度太粗，无法对线程进行分类管理，会导致局部问题影响全局。bulkhead pattern模式在于，采用多个线程池来管理线程，这样使得1个线程池资源出现问题时不会造成另一个线程池资源问题。尽量使问题最小化。<br>Hystrix采用舱壁模式来实现线程池的隔离，它会为每一个依赖服务创建一个独立的线程池，隔离相互之间的依赖关系，并限制对其中任何一个的并发访问。就算某个依赖服务出现延迟过高的情况，也不会拖慢其他的依赖服务。<h4 id="线程成本"><a href="#线程成本" class="headerlink" title="线程成本"></a>线程成本</h4><img src="/2018/09/17/Spring-Cloud-Hystrix——原理分析/3.png" title="图3 Hystrix 命令性能监控图">
 在99%情况下，使用线程池隔离的延迟有9ms，对于大多数需求来说，这样的消耗是微乎其微的，更何况可为系统在稳定性的灵活性上带来巨大的提升。<br>对于非常低延迟请求（例如那些主要触发内存缓存的请求），开销可能太高，在这种情况下，可以使用另一种方法，如信号量，信号量可以控制单个依赖服务的并发度，信号量的开销远比线程池的开销小，但是它不允许设置超时和实现异步访问。所以，只有在依赖服务时足够可靠的情况下才使用信号量。</li>
+</ul>
+</li>
 </ul>
 
       
