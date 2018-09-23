@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="在实现一个大型分布式系统时，往往还需要更多高级的配置功能。下面将详细介绍Hystrix各接口和注解的使用方法。 创建请求命令Hystrix命令就是前面的HystrixCommand，它用来封装具体的依赖服务调用逻辑。使用继承的方式，比如：12345678910111213public class UserCommand extends HystrixCommand&amp;lt;User&amp;gt; &amp;#12">
+<meta name="description" content="在实现一个大型分布式系统时，往往还需要更多高级的配置功能。下面将详细介绍Hystrix各接口和注解的使用方法。 创建请求命令Hystrix命令就是前面的HystrixCommand，它用来封装具体的依赖服务调用逻辑。  使用继承的方式，比如：12345678910111213public class UserCommand extends HystrixCommand&amp;lt;User&amp;gt; &amp;#">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spring Cloud Hystrix——使用详解">
 <meta property="og:url" content="http://yoursite.com/2018/09/23/Spring-Cloud-Hystrix——使用详解/index.html">
 <meta property="og:site_name" content="Adorable">
-<meta property="og:description" content="在实现一个大型分布式系统时，往往还需要更多高级的配置功能。下面将详细介绍Hystrix各接口和注解的使用方法。 创建请求命令Hystrix命令就是前面的HystrixCommand，它用来封装具体的依赖服务调用逻辑。使用继承的方式，比如：12345678910111213public class UserCommand extends HystrixCommand&amp;lt;User&amp;gt; &amp;#12">
+<meta property="og:description" content="在实现一个大型分布式系统时，往往还需要更多高级的配置功能。下面将详细介绍Hystrix各接口和注解的使用方法。 创建请求命令Hystrix命令就是前面的HystrixCommand，它用来封装具体的依赖服务调用逻辑。  使用继承的方式，比如：12345678910111213public class UserCommand extends HystrixCommand&amp;lt;User&amp;gt; &amp;#">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-23T14:05:03.408Z">
+<meta property="og:updated_time" content="2018-09-23T14:36:21.080Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Cloud Hystrix——使用详解">
-<meta name="twitter:description" content="在实现一个大型分布式系统时，往往还需要更多高级的配置功能。下面将详细介绍Hystrix各接口和注解的使用方法。 创建请求命令Hystrix命令就是前面的HystrixCommand，它用来封装具体的依赖服务调用逻辑。使用继承的方式，比如：12345678910111213public class UserCommand extends HystrixCommand&amp;lt;User&amp;gt; &amp;#12">
+<meta name="twitter:description" content="在实现一个大型分布式系统时，往往还需要更多高级的配置功能。下面将详细介绍Hystrix各接口和注解的使用方法。 创建请求命令Hystrix命令就是前面的HystrixCommand，它用来封装具体的依赖服务调用逻辑。  使用继承的方式，比如：12345678910111213public class UserCommand extends HystrixCommand&amp;lt;User&amp;gt; &amp;#">
 
 
 
@@ -300,12 +300,25 @@
 
       
         <p>在实现一个大型分布式系统时，往往还需要更多高级的配置功能。下面将详细介绍Hystrix各接口和注解的使用方法。</p>
-<h3 id="创建请求命令"><a href="#创建请求命令" class="headerlink" title="创建请求命令"></a>创建请求命令</h3><p>Hystrix命令就是前面的HystrixCommand，它用来封装具体的依赖服务调用逻辑。<br>使用继承的方式，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class UserCommand extends HystrixCommand&lt;User&gt; &#123;</span><br><span class="line">    private RestTemplate restTemplate;</span><br><span class="line">    private Long id;</span><br><span class="line">    public UserCommand(RestTemplate restTemplate, Long id) &#123;</span><br><span class="line">        super(Setter.withGroupKey(asKey(&quot;&quot;)));</span><br><span class="line">        this.restTemplate = restTemplate;</span><br><span class="line">        this.id = id;</span><br><span class="line">    &#125;</span><br><span class="line">    @Override</span><br><span class="line">    protected User run() &#123;</span><br><span class="line">        return restTemplate.getForObject(&quot;http://USER-SERVICE/users/&#123;1&#125;&quot;, User.class, id);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="创建请求命令"><a href="#创建请求命令" class="headerlink" title="创建请求命令"></a>创建请求命令</h3><p>Hystrix命令就是前面的HystrixCommand，它用来封装具体的依赖服务调用逻辑。</p>
+<ol>
+<li>使用继承的方式，比如：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class UserCommand extends HystrixCommand&lt;User&gt; &#123;</span><br><span class="line">    private RestTemplate restTemplate;</span><br><span class="line">    private Long id;</span><br><span class="line">    public UserCommand(RestTemplate restTemplate, Long id) &#123;</span><br><span class="line">        super(Setter.withGroupKey(asKey(&quot;&quot;)));</span><br><span class="line">        this.restTemplate = restTemplate;</span><br><span class="line">        this.id = id;</span><br><span class="line">    &#125;</span><br><span class="line">    @Override</span><br><span class="line">    protected User run() &#123;</span><br><span class="line">        return restTemplate.getForObject(&quot;http://USER-SERVICE/users/&#123;1&#125;&quot;, User.class, id);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
 <p>通过继承的方式，我们可以实现请求的同步或异步执行。</p>
 <ul>
 <li>同步执行：User user=new UserCommand(restTemplate,10L).execute();</li>
 <li>异步执行：Future<user> futureUser = new UserCommand(restTemplate, 11L).queue();<br>异步执行时，可以通过对返回的futureUser调用get方法来获取结果。</user></li>
 </ul>
+<ol start="2">
+<li>使用“快速入门”中讲解的方式<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@Service</span><br><span class="line">public class UserService &#123;</span><br><span class="line">    @Autowired</span><br><span class="line">    private RestTemplate restTemplate;  </span><br><span class="line">    @HystrixCommand</span><br><span class="line">    public User getUserById(Long id)&#123;</span><br><span class="line">        return restTemplate.getForObject(&quot;http://USER-SERVICE/users/&#123;1&#125;&quot;, User.class, id);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>虽然@HystrixCommand注解可以非常优雅地定义Hystrix命令的实现，但是getUserById只是实现同步执行，如需实现异步执行，要另外定义：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@HystrixCommand</span><br><span class="line">public Future&lt;User&gt; getUserByIdAsync(final Long id)&#123;</span><br><span class="line">    return new AsyncResult&lt;User&gt;() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public User invoke() &#123;</span><br><span class="line">            return restTemplate.getForObject(&quot;http://USER-SERVICE/users/&#123;1&#125;&quot;, User.class, id);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ol start="3">
+<li>通过Observable来实现响应式执行方式<br>通过调用observe()和toObservable()方法可以返回Observable对象，比如：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Observable&lt;String&gt; ho = new UserCommand(restTemplate,14L).observe();</span><br><span class="line">Observable&lt;String&gt; co = new UserCommand(restTemplate,15L).toObservable();</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
 
       
     </div>
