@@ -89,7 +89,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/09/17/Spring-Cloud-Hystrix——原理分析/1.png">
 <meta property="og:image" content="http://yoursite.com/2018/09/17/Spring-Cloud-Hystrix——原理分析/2.png">
 <meta property="og:image" content="http://yoursite.com/2018/09/17/Spring-Cloud-Hystrix——原理分析/3.png">
-<meta property="og:updated_time" content="2018-09-20T14:32:37.854Z">
+<meta property="og:updated_time" content="2018-09-23T12:49:06.692Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Cloud Hystrix——原理分析">
 <meta name="twitter:description" content="根据Netflix Hystrix流程图来详细了解：当一个请求调用了相关服务依赖之后Hystrix工作流程（即当访问了http://localhost:9000/ribbon-consumer 请求之后，在RIBBON-CONSUMER中是如何处理的） 工作流程 创建 HystrixCommand 或 HystrixObservableCommand 对象首先，创建一个 HystrixComman">
@@ -342,11 +342,18 @@
 <li>execute()：通过调用queue()来得到一个Future对象，然后调用get()方法来获取Future中包含的值。</li>
 <li>queue()：将Observable转换成BlockingObservable，在将BlockingObservable转换成一个Future。</li>
 <li>observe()：订阅返回的Observable，并且立即开始执行命令的逻辑，</li>
-<li>toObservable()：返回一个没有改变的Observable，你必须订阅它，它才能够开始执行命令的逻辑。<h3 id="依赖隔离"><a href="#依赖隔离" class="headerlink" title="依赖隔离"></a>依赖隔离</h3>舱壁模式（bulkhead pattern）：一般情况我们都用一个线程池来管理所有线程，容易造成一个问题，粒度太粗，无法对线程进行分类管理，会导致局部问题影响全局。bulkhead pattern模式在于，采用多个线程池来管理线程，这样使得1个线程池资源出现问题时不会造成另一个线程池资源问题。尽量使问题最小化。<br>Hystrix采用舱壁模式来实现线程池的隔离，它会为每一个依赖服务创建一个独立的线程池，隔离相互之间的依赖关系，并限制对其中任何一个的并发访问。就算某个依赖服务出现延迟过高的情况，也不会拖慢其他的依赖服务。<h4 id="线程成本"><a href="#线程成本" class="headerlink" title="线程成本"></a>线程成本</h4><img src="/2018/09/17/Spring-Cloud-Hystrix——原理分析/3.png" title="图3 Hystrix 命令性能监控图">
-在99%情况下，使用线程池隔离的延迟有9ms，对于大多数需求来说，这样的消耗是微乎其微的，更何况可为系统在稳定性的灵活性上带来巨大的提升。<br>对于非常低延迟请求（例如那些主要触发内存缓存的请求），开销可能太高，在这种情况下，可以使用另一种方法，如信号量，信号量可以控制单个依赖服务的并发度，信号量的开销远比线程池的开销小，但是它不允许设置超时和实现异步访问。所以，只有在依赖服务时足够可靠的情况下才使用信号量。</li>
+<li>toObservable()：返回一个没有改变的Observable，你必须订阅它，它才能够开始执行命令的逻辑。<h3 id="依赖隔离"><a href="#依赖隔离" class="headerlink" title="依赖隔离"></a>依赖隔离</h3>舱壁模式（bulkhead pattern）：一般情况我们都用一个线程池来管理所有线程，容易造成一个问题，粒度太粗，无法对线程进行分类管理，会导致局部问题影响全局。bulkhead pattern模式在于，采用多个线程池来管理线程，这样使得1个线程池资源出现问题时不会造成另一个线程池资源问题。尽量使问题最小化。<br>Hystrix采用舱壁模式来实现线程池的隔离，它会为每一个依赖服务创建一个独立的线程池，隔离相互之间的依赖关系，并限制对其中任何一个的并发访问。就算某个依赖服务出现延迟过高的情况，也不会拖慢其他的依赖服务。</li>
 </ul>
 </li>
 </ul>
+<p>Hystrix给了我们三种key来用于隔离。</p>
+<ul>
+<li>CommandKey，针对相同的接口一般CommandKey值相同，目的是把HystrixCommand，HystrixCircuitBreaker，HytrixCommandMerics以及其他相关对象关联在一起，形成一个原子组。采用原生接口的话，默认值为类名；采用注解形式的话，默认值为方法名。</li>
+<li>CommandGroupKey，对CommandKey分组，用于真正的隔离。相同CommandGroupKey会使用同一个线程池或者信号量。一般情况相同业务功能会使用相同的CommandGroupKey。</li>
+<li>ThreadPoolKey，如果说CommandGroupKey只是逻辑隔离，那么ThreadPoolKey就是物理隔离，当没有设置ThreadPoolKey的时候，线程池或者信号量的划分按照CommandGroupKey，当设置了ThreadPoolKey，那么线程池和信号量的划分就按照ThreadPoolKey来处理，相同ThreadPoolKey采用同一个线程池或者信号量。</li>
+</ul>
+<h4 id="线程成本"><a href="#线程成本" class="headerlink" title="线程成本"></a>线程成本</h4><img src="/2018/09/17/Spring-Cloud-Hystrix——原理分析/3.png" title="图3 Hystrix 命令性能监控图">
+<p>在99%情况下，使用线程池隔离的延迟有9ms，对于大多数需求来说，这样的消耗是微乎其微的，更何况可为系统在稳定性的灵活性上带来巨大的提升。<br>对于非常低延迟请求（例如那些主要触发内存缓存的请求），开销可能太高，在这种情况下，可以使用另一种方法，如信号量，信号量可以控制单个依赖服务的并发度，信号量的开销远比线程池的开销小，但是它不允许设置超时和实现异步访问。所以，只有在依赖服务时足够可靠的情况下才使用信号量。</p>
 
       
     </div>
@@ -380,6 +387,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/23/Spring-Cloud-Hystrix——使用详解/" rel="prev" title="Spring Cloud Hystrix——使用详解">
+                Spring Cloud Hystrix——使用详解 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -456,7 +467,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
