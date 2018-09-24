@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Adorable">
 <meta property="og:description" content="在实现一个大型分布式系统时，往往还需要更多高级的配置功能。下面将详细介绍Hystrix各接口和注解的使用方法。 创建请求命令Hystrix命令就是前面的HystrixCommand，它用来封装具体的依赖服务调用逻辑。  使用继承的方式，比如：12345678910111213public class UserCommand extends HystrixCommand&amp;lt;User&amp;gt; &amp;#">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-24T16:04:35.944Z">
+<meta property="og:updated_time" content="2018-09-24T16:21:34.636Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Cloud Hystrix——使用详解">
 <meta name="twitter:description" content="在实现一个大型分布式系统时，往往还需要更多高级的配置功能。下面将详细介绍Hystrix各接口和注解的使用方法。 创建请求命令Hystrix命令就是前面的HystrixCommand，它用来封装具体的依赖服务调用逻辑。  使用继承的方式，比如：12345678910111213public class UserCommand extends HystrixCommand&amp;lt;User&amp;gt; &amp;#">
@@ -332,7 +332,10 @@
 <ol>
 <li>HystrixCommand提供了同步和异步两种执行方式，而HystrixObservableCommand只有异步方式</li>
 <li>HystrixCommand的run方法是用内部线程池的线程来执行的，同一个HystrixCommand对象只能执行一次run()，而HystrixObservableCommand则是由调用方(例如Tomcat容器)的线程来执行的，因为是异步，所以两种方式都能很好的起到资源隔离的效果。</li>
-<li>HystrixCommand一次只能发送单条数据返回，而HystrixObservableCommand一次可以发送多条数据返回.<h3 id="定义服务降级"><a href="#定义服务降级" class="headerlink" title="定义服务降级"></a>定义服务降级</h3>fallback是Hystrix命令执行失败时使用的后备方法，用来实现服务降级处理逻辑。<br>针对前面创建请求命令的三种方式，当命令执行过程中出现错误、超时、线程池拒绝、断路器熔断等情况时，分别执行对应创建请求命令方式的降级处理逻辑。</li>
+<li>HystrixCommand一次只能发送单条数据返回，而HystrixObservableCommand一次可以发送多条数据返回.</li>
+</ol>
+<h3 id="定义服务降级"><a href="#定义服务降级" class="headerlink" title="定义服务降级"></a>定义服务降级</h3><p>fallback是Hystrix命令执行失败时使用的后备方法，用来实现服务降级处理逻辑。<br>针对前面创建请求命令的三种方式，当命令执行过程中出现错误、超时、线程池拒绝、断路器熔断等情况时，分别执行对应创建请求命令方式的降级处理逻辑。</p>
+<ol>
 <li><p>使用继承的方式——重载getFallback()方法</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">    protected User getFallback()&#123;</span><br><span class="line">        return new User();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 </li>
