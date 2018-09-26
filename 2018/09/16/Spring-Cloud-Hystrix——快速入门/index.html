@@ -86,14 +86,14 @@
 <meta property="og:site_name" content="Adorable">
 <meta property="og:description" content="在微服务架构中，我们将系统拆分成了一个个的服务单元，各单元间通过服务注册与订阅的方式互相依赖。由于每个单元都在不同的进程中运行，依赖通过远程调用的方式执行，这样就有可能因为网络原因或是依赖服务自身问题出现调用故障或延迟，而这些问题会直接导致调用方的对外服务也出现延迟，若此时调用方的请求不断增加，最后就会出现因等待出现故障的依赖方响应而形成任务积压，最终导致自身服务的瘫痪。 举个例子，在一个电商网站">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2018/09/16/Spring-Cloud-Hystrix——快速入门/1.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/16/Spring-Cloud-Hystrix——快速入门/3.png">
 <meta property="og:image" content="http://yoursite.com/2018/09/16/Spring-Cloud-Hystrix——快速入门/1.png">
 <meta property="og:image" content="http://yoursite.com/2018/09/16/Spring-Cloud-Hystrix——快速入门/2.png">
-<meta property="og:updated_time" content="2018-09-26T14:55:11.845Z">
+<meta property="og:updated_time" content="2018-09-26T14:57:20.650Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Cloud Hystrix——快速入门">
 <meta name="twitter:description" content="在微服务架构中，我们将系统拆分成了一个个的服务单元，各单元间通过服务注册与订阅的方式互相依赖。由于每个单元都在不同的进程中运行，依赖通过远程调用的方式执行，这样就有可能因为网络原因或是依赖服务自身问题出现调用故障或延迟，而这些问题会直接导致调用方的对外服务也出现延迟，若此时调用方的请求不断增加，最后就会出现因等待出现故障的依赖方响应而形成任务积压，最终导致自身服务的瘫痪。 举个例子，在一个电商网站">
-<meta name="twitter:image" content="http://yoursite.com/2018/09/16/Spring-Cloud-Hystrix——快速入门/1.png">
+<meta name="twitter:image" content="http://yoursite.com/2018/09/16/Spring-Cloud-Hystrix——快速入门/3.png">
 
 
 
@@ -304,7 +304,7 @@
 
       
         <p>在微服务架构中，我们将系统拆分成了一个个的服务单元，各单元间通过服务注册与订阅的方式互相依赖。由于每个单元都在不同的进程中运行，依赖通过远程调用的方式执行，这样就有可能因为网络原因或是依赖服务自身问题出现调用故障或延迟，而这些问题会直接导致调用方的对外服务也出现延迟，若此时调用方的请求不断增加，最后就会出现因等待出现故障的依赖方响应而形成任务积压，最终导致自身服务的瘫痪。</p>
-<p>举个例子，在一个电商网站中，我们可能会将系统拆分成，用户、订单、库存、积分、评论等一系列的服务单元。用户创建一个订单的时候，在调用订单服务创建订单的时候，会向库存服务来请求出货（判断是否有足够库存来出货）。此时若库存服务因网络原因无法被访问到，导致创建订单服务的线程进入等待库存申请服务的响应，在漫长的等待之后用户会因为请求库存失败而得到创建订单失败的结果。如果在高并发情况之下，因这些等待线程在等待库存服务的响应而未能释放，使得后续到来的创建订单请求被阻塞，最终导致订单服务也不可用，这就是所谓的雪崩效应。<br>如下图所示：<br><img src="/2018/09/16/Spring-Cloud-Hystrix——快速入门/1.png"><br>造成雪崩原因可以归结为以下三个：</p>
+<p>举个例子，在一个电商网站中，我们可能会将系统拆分成，用户、订单、库存、积分、评论等一系列的服务单元。用户创建一个订单的时候，在调用订单服务创建订单的时候，会向库存服务来请求出货（判断是否有足够库存来出货）。此时若库存服务因网络原因无法被访问到，导致创建订单服务的线程进入等待库存申请服务的响应，在漫长的等待之后用户会因为请求库存失败而得到创建订单失败的结果。如果在高并发情况之下，因这些等待线程在等待库存服务的响应而未能释放，使得后续到来的创建订单请求被阻塞，最终导致订单服务也不可用，这就是所谓的雪崩效应。<br>如下图所示：<br><img src="/2018/09/16/Spring-Cloud-Hystrix——快速入门/3.png"><br>造成雪崩原因可以归结为以下三个：</p>
 <ul>
 <li>服务提供者不可用（硬件故障，程序Bug，缓存击穿，用户大量请求）</li>
 <li>重试加大流量（用户重试，代码逻辑重试）</li>
