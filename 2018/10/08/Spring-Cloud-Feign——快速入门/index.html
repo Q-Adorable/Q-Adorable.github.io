@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta name="description" content="基于Netflix Feign实现，整合了Ribbon与Hystrix，除了提供这两者的强大功能外，还提供了一种声明式的Web服务客户端定义方式。只需要创建一个接口并用注解的方式来配置它，即可完成对服务提供方的接口绑定，简化了在使用Ribbon时自行封装服务调用客户端的开发量。Feign具备可插拔的注解支持，包括Feign注解和JAX-RS注解。 快速入门 创建工程(feign-consumer)">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://yoursite.com/2018/09/10/hello-world/index.html">
+<meta property="og:title" content="Spring Cloud Feign——快速入门">
+<meta property="og:url" content="http://yoursite.com/2018/10/08/Spring-Cloud-Feign——快速入门/index.html">
 <meta property="og:site_name" content="Adorable">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:description" content="基于Netflix Feign实现，整合了Ribbon与Hystrix，除了提供这两者的强大功能外，还提供了一种声明式的Web服务客户端定义方式。只需要创建一个接口并用注解的方式来配置它，即可完成对服务提供方的接口绑定，简化了在使用Ribbon时自行封装服务调用客户端的开发量。Feign具备可插拔的注解支持，包括Feign注解和JAX-RS注解。 快速入门 创建工程(feign-consumer)">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-10T07:34:48.843Z">
+<meta property="og:updated_time" content="2018-10-08T16:07:53.291Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hello World">
-<meta name="twitter:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta name="twitter:title" content="Spring Cloud Feign——快速入门">
+<meta name="twitter:description" content="基于Netflix Feign实现，整合了Ribbon与Hystrix，除了提供这两者的强大功能外，还提供了一种声明式的Web服务客户端定义方式。只需要创建一个接口并用注解的方式来配置它，即可完成对服务提供方的接口绑定，简化了在使用Ribbon时自行封装服务调用客户端的开发量。Feign具备可插拔的注解支持，包括Feign注解和JAX-RS注解。 快速入门 创建工程(feign-consumer)">
 
 
 
@@ -119,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/09/10/hello-world/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/10/08/Spring-Cloud-Feign——快速入门/"/>
 
 
 
 
 
-  <title>Hello World | Adorable</title>
+  <title>Spring Cloud Feign——快速入门 | Adorable</title>
   
 
 
@@ -232,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/10/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/08/Spring-Cloud-Feign——快速入门/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Xin Qi">
@@ -249,7 +249,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Hello World</h1>
+          <h1 class="post-title" itemprop="name headline">Spring Cloud Feign——快速入门</h1>
         
 
         <div class="post-meta">
@@ -261,8 +261,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-10T15:34:48+08:00">
-                2018-09-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-08T23:35:24+08:00">
+                2018-10-08
               </time>
             
 
@@ -299,15 +299,20 @@
       
 
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+        <p>基于Netflix Feign实现，整合了Ribbon与Hystrix，除了提供这两者的强大功能外，还提供了一种声明式的Web服务客户端定义方式。<br>只需要创建一个接口并用注解的方式来配置它，即可完成对服务提供方的接口绑定，简化了在使用Ribbon时自行封装服务调用客户端的开发量。Feign具备可插拔的注解支持，包括Feign注解和JAX-RS注解。</p>
+<h3 id="快速入门"><a href="#快速入门" class="headerlink" title="快速入门"></a>快速入门</h3><ol>
+<li><p>创建工程(feign-consumer)，引入依赖</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">compile(&apos;org.springframework.cloud:spring-cloud-starter-netflix-eureka-client&apos;)</span><br><span class="line">compile(&apos;org.springframework.cloud:spring-cloud-starter-openfeign&apos;)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>主类中添加@EnableFeignClients注解开启Spring Cloud Feign的支持功能</p>
+</li>
+<li><p>定义HelloService接口，通过@FeignClient注解指定服务名来绑定服务，再使用Spring MVC的注解来绑定具体该服务提供的REST接口。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@FeignClient(&quot;hello-service&quot;)</span><br><span class="line">public interface HelloService &#123;</span><br><span class="line">    @RequestMapping(&quot;/hello&quot;)</span><br><span class="line">    String hello();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建ConsumerController来实现对Feign客户端的调用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">public class ConsumerController &#123;</span><br><span class="line">    @Autowired</span><br><span class="line">    HelloService helloService;</span><br><span class="line">    </span><br><span class="line">    @RequestMapping(value = &quot;/feign-consumer&quot;,method = RequestMethod.GET)</span><br><span class="line">    public String helloConsumer()&#123;</span><br><span class="line">        return helloService.hello();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
 
       
     </div>
@@ -332,15 +337,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2018/09/23/Spring-Cloud-Hystrix——使用详解/" rel="next" title="Spring Cloud Hystrix——使用详解">
+                <i class="fa fa-chevron-left"></i> Spring Cloud Hystrix——使用详解
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/10/Ribbon/" rel="prev" title="Ribbon">
-                Ribbon <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -454,7 +459,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick-Start"><span class="nav-number">1.</span> <span class="nav-text">Quick Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-a-new-post"><span class="nav-number">1.1.</span> <span class="nav-text">Create a new post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run-server"><span class="nav-number">1.2.</span> <span class="nav-text">Run server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generate-static-files"><span class="nav-number">1.3.</span> <span class="nav-text">Generate static files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deploy-to-remote-sites"><span class="nav-number">1.4.</span> <span class="nav-text">Deploy to remote sites</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#快速入门"><span class="nav-number">1.</span> <span class="nav-text">快速入门</span></a></li></ol></div>
             
 
           </div>
