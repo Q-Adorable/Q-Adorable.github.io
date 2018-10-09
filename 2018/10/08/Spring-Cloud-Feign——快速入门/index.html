@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Adorable">
 <meta property="og:description" content="基于Netflix Feign实现，整合了Ribbon与Hystrix，除了提供这两者的强大功能外，还提供了一种声明式的Web服务客户端定义方式。只需要创建一个接口并用注解的方式来配置它，即可完成对服务提供方的接口绑定，简化了在使用Ribbon时自行封装服务调用客户端的开发量。Feign具备可插拔的注解支持，包括Feign注解和JAX-RS注解。 快速入门 创建工程(feign-consumer)">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-10-08T16:07:53.291Z">
+<meta property="og:updated_time" content="2018-10-09T03:32:59.175Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Cloud Feign——快速入门">
 <meta name="twitter:description" content="基于Netflix Feign实现，整合了Ribbon与Hystrix，除了提供这两者的强大功能外，还提供了一种声明式的Web服务客户端定义方式。只需要创建一个接口并用注解的方式来配置它，即可完成对服务提供方的接口绑定，简化了在使用Ribbon时自行封装服务调用客户端的开发量。Feign具备可插拔的注解支持，包括Feign注解和JAX-RS注解。 快速入门 创建工程(feign-consumer)">
@@ -306,7 +306,7 @@
 </li>
 <li><p>主类中添加@EnableFeignClients注解开启Spring Cloud Feign的支持功能</p>
 </li>
-<li><p>定义HelloService接口，通过@FeignClient注解指定服务名来绑定服务，再使用Spring MVC的注解来绑定具体该服务提供的REST接口。</p>
+<li><p>定义HelloService接口，通过@FeignClient注解指定服务名来绑定服务，再使用Spring MVC的注解来绑定具体该服务提供的REST接口(复用hello-service服务)。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@FeignClient(&quot;hello-service&quot;)</span><br><span class="line">public interface HelloService &#123;</span><br><span class="line">    @RequestMapping(&quot;/hello&quot;)</span><br><span class="line">    String hello();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>创建ConsumerController来实现对Feign客户端的调用</p>
