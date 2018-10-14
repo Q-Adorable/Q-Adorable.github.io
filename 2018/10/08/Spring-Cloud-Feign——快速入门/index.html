@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Adorable">
 <meta property="og:description" content="基于Netflix Feign实现，整合了Ribbon与Hystrix，除了提供这两者的强大功能外，还提供了一种声明式的Web服务客户端定义方式。只需要创建一个接口并用注解的方式来配置它，即可完成对服务提供方的接口绑定，简化了在使用Ribbon时自行封装服务调用客户端的开发量。Feign具备可插拔的注解支持，包括Feign注解和JAX-RS注解。 快速入门 创建工程(feign-consumer)">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-10-11T17:54:45.752Z">
+<meta property="og:updated_time" content="2018-10-14T16:51:45.007Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Cloud Feign——快速入门">
 <meta name="twitter:description" content="基于Netflix Feign实现，整合了Ribbon与Hystrix，除了提供这两者的强大功能外，还提供了一种声明式的Web服务客户端定义方式。只需要创建一个接口并用注解的方式来配置它，即可完成对服务提供方的接口绑定，简化了在使用Ribbon时自行封装服务调用客户端的开发量。Feign具备可插拔的注解支持，包括Feign注解和JAX-RS注解。 快速入门 创建工程(feign-consumer)">
@@ -345,7 +345,14 @@
 <li>创建RefactorHelloController类继承hello-service-api中定义HelloService接口<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">public class RefactorHelloController implements HelloService &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public String hello(@RequestParam(&quot;name&quot;) String name) &#123;</span><br><span class="line">        return &quot;Hello &quot; + name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public User hello(@RequestHeader(&quot;name&quot;) String name, @RequestParam(&quot;age&quot;) Integer age) &#123;</span><br><span class="line">        return new User(name,age);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String hello(@RequestBody User user) &#123;</span><br><span class="line">        return &quot;Hello &quot;+ user.getName()+&quot;, &quot;+user.getAge();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>可以看到通过继承的方式，在Controller中不再包含以往会定义的请求映射注解@RequestMapping，而参数的注解定义在重写的时候会自动带过来。</p>
+<p>可以看到通过继承的方式，在Controller中不再包含以往会定义的请求映射注解@RequestMapping，而参数的注解定义在重写的时候会自动带过来。在这里只需要再增加@RestController注解使该类成为一个REST接口类就可以了。</p>
+<ol start="6">
+<li>在服务消费者feign-consumer中同样新增对hello-service-api的依赖。</li>
+<li>创建RefactorHelloService接口，并继承hello-service-api包中的HelloService接口，然后添加@FeignClient注解来绑定服务</li>
+<li>最后，在ConsumerController中，注入RefactorHelloService的实例，并新增一个请求来触发对RefactorHelloService的实例调用<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@Autowired</span><br><span class="line">RefactorHelloService refactorHelloService;</span><br><span class="line"></span><br><span class="line">@RequestMapping(value = &quot;/feign-consumer3&quot;,method = RequestMethod.GET)</span><br><span class="line">public String helloConsumer3()&#123;</span><br><span class="line">    StringBuilder sb=new StringBuilder();</span><br><span class="line">    sb.append(refactorHelloService.hello(&quot;MIMI&quot;)).append(&quot;\n&quot;);</span><br><span class="line">    sb.append(refactorHelloService.hello(&quot;MIMI&quot;,20)).append(&quot;\n&quot;);</span><br><span class="line">    sb.append(refactorHelloService.hello(new com.example.helloserviceapi.entity.User(&quot;MIMI&quot;,20))).append(&quot;\n&quot;);</span><br><span class="line">    return sb.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="优点和缺点"><a href="#优点和缺点" class="headerlink" title="优点和缺点"></a>优点和缺点</h4><p>优点：是可以将接口定义从Controller中剥离，可以有效减少服务客户端的绑定配置，实现接口定义共享。<br>缺点：由于接口在构建期间就建立起了依赖，那么接口变动就会对项目构建造成影响，可能服务提供方修改了一个接口定义，那么会直接导致客户端工程构建失败。</p>
 
       
     </div>
@@ -492,7 +499,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#快速入门"><span class="nav-number">1.</span> <span class="nav-text">快速入门</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参数绑定"><span class="nav-number">2.</span> <span class="nav-text">参数绑定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#继承特性"><span class="nav-number">3.</span> <span class="nav-text">继承特性</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#快速入门"><span class="nav-number">1.</span> <span class="nav-text">快速入门</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参数绑定"><span class="nav-number">2.</span> <span class="nav-text">参数绑定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#继承特性"><span class="nav-number">3.</span> <span class="nav-text">继承特性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#优点和缺点"><span class="nav-number">3.1.</span> <span class="nav-text">优点和缺点</span></a></li></ol></li></ol></div>
             
 
           </div>
