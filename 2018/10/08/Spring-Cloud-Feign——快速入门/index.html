@@ -86,10 +86,12 @@
 <meta property="og:site_name" content="Adorable">
 <meta property="og:description" content="基于Netflix Feign实现，整合了Ribbon与Hystrix，除了提供这两者的强大功能外，还提供了一种声明式的Web服务客户端定义方式。只需要创建一个接口并用注解的方式来配置它，即可完成对服务提供方的接口绑定，简化了在使用Ribbon时自行封装服务调用客户端的开发量。Feign具备可插拔的注解支持，包括Feign注解和JAX-RS注解。 快速入门 创建工程(feign-consumer)">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-10-14T16:51:45.007Z">
+<meta property="og:image" content="http://yoursite.com/2018/10/08/Spring-Cloud-Feign——快速入门/1.png">
+<meta property="og:updated_time" content="2018-10-15T17:07:01.439Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Cloud Feign——快速入门">
 <meta name="twitter:description" content="基于Netflix Feign实现，整合了Ribbon与Hystrix，除了提供这两者的强大功能外，还提供了一种声明式的Web服务客户端定义方式。只需要创建一个接口并用注解的方式来配置它，即可完成对服务提供方的接口绑定，简化了在使用Ribbon时自行封装服务调用客户端的开发量。Feign具备可插拔的注解支持，包括Feign注解和JAX-RS注解。 快速入门 创建工程(feign-consumer)">
+<meta name="twitter:image" content="http://yoursite.com/2018/10/08/Spring-Cloud-Feign——快速入门/1.png">
 
 
 
@@ -353,6 +355,19 @@
 </li>
 </ol>
 <h4 id="优点和缺点"><a href="#优点和缺点" class="headerlink" title="优点和缺点"></a>优点和缺点</h4><p>优点：是可以将接口定义从Controller中剥离，可以有效减少服务客户端的绑定配置，实现接口定义共享。<br>缺点：由于接口在构建期间就建立起了依赖，那么接口变动就会对项目构建造成影响，可能服务提供方修改了一个接口定义，那么会直接导致客户端工程构建失败。</p>
+<h3 id="Ribbon配置"><a href="#Ribbon配置" class="headerlink" title="Ribbon配置"></a>Ribbon配置</h3><p>由于 Spring Cloud Feign 的客户端负载均衡是通过 Spring Cloud Ribbon 实现的，所以我们可以直接通过配置 Ribbon 的客户端的方式来自定义各个服务客户端调用的参数。</p>
+<h4 id="全局配置"><a href="#全局配置" class="headerlink" title="全局配置"></a>全局配置</h4><p>可以直接使用 ribbon.&lt;key&gt;=&lt;value&gt;的方式来设置ribbon的各项默认参数，比如，修改默认的客户端调用超时时间：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ribbon:</span><br><span class="line">  ConnectionTimeout: 500</span><br><span class="line">  ReadTimeout: 5000</span><br></pre></td></tr></table></figure></p>
+<h4 id="指定服务配置"><a href="#指定服务配置" class="headerlink" title="指定服务配置"></a>指定服务配置</h4><p>大多数情况下，我们对于服务调用的超时时间等可能会根据实际服务的特性做一些调整，所以仅仅依靠默认配置是不行的，在使用Spring Cloud Feign的时候，针对各个服务客户端进行个性化的配置方式与使用Spring Cloud Ribbon时的配置方式是一样的，都采用&lt;client&gt;.ribbon.&lt;key&gt;=&lt;value&gt;的格式设置，&lt;client&gt; 为使用@FeignClient注解的name属性或者value属性指定的服务名，需要区分大小写，示例如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">hello-service:</span><br><span class="line">  ribbon:</span><br><span class="line">    ConnectionTimeout: 500  //连接超时时间</span><br><span class="line">    ReadTimeout: 2000   //读取超时时间</span><br><span class="line">    OkToRetryOnAllOperatotions: true   //对所有操作请求都进行重试</span><br><span class="line">    MaxAutoRetriesNextServer: 2   //切换服务器实例的重试次数</span><br><span class="line">    MaxAutoRetries: 1   //对当前实例的重试次数</span><br><span class="line">    ServerListRefreshInterval: 200   //刷新服务列表源的间隔时间</span><br></pre></td></tr></table></figure></p>
+<h4 id="重试机制"><a href="#重试机制" class="headerlink" title="重试机制"></a>重试机制</h4><p>在Feign中默认实现了请求的重试机制。<br>示例：</p>
+<ol>
+<li><p>在hello-service服务的/hello接口实现中，增加一些随机延迟。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(value = &quot;/hello&quot;, method = RequestMethod.GET)</span><br><span class="line">public String index() throws Exception &#123;</span><br><span class="line">    int sleepTime = new Random().nextInt(3000);</span><br><span class="line">    System.out.println(&quot;sleepTime:&quot;+sleepTime);</span><br><span class="line">    Thread.sleep(sleepTime);</span><br><span class="line">    System.out.println(&quot;/hello&quot;);</span><br><span class="line">    return &quot;Hello World&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在feign-consumer中增加上文提到的重试配置参数。由于hello-service.ribbon.MaxAutoRetries=1，所以重试策略先尝试访问首选实例一次，失败后才更换实例访问，而更换实例访问的次数通过hello-service.ribbon.MaxAutoRetriesNextServer=2来设置。</p>
+</li>
+<li>最后，启动这些服务，并尝试访问几次<a href="http://localhost:9001/feign-consumer" target="_blank" rel="noopener">http://localhost:9001/feign-consumer</a> 接口，当请求发生超时的时候，在hello-service控制台中会输出如下内容<img src="/2018/10/08/Spring-Cloud-Feign——快速入门/1.png">
+第二次请求超时，Feign客户端发起了重试。Feign客户端在进行服务调用时，虽然经历了两次次失败，但是通过重试机制，最终还是获得了请求结果。所以四次请求共输出了四次/hello。所以，重试机制的实现，对于构建高可用的服务集群来说非常重要。<br>注意：<br>Ribbon的超时与Hystrix的超时是两个概念。为了让上述实现有效，需要让Hystrix的超市时间大于Ribbon的超时时间，否则Hystrix命令超时后，该命令直接熔断，重试机制就没有意义了。</li>
+</ol>
 
       
     </div>
@@ -499,7 +514,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#快速入门"><span class="nav-number">1.</span> <span class="nav-text">快速入门</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参数绑定"><span class="nav-number">2.</span> <span class="nav-text">参数绑定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#继承特性"><span class="nav-number">3.</span> <span class="nav-text">继承特性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#优点和缺点"><span class="nav-number">3.1.</span> <span class="nav-text">优点和缺点</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#快速入门"><span class="nav-number">1.</span> <span class="nav-text">快速入门</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参数绑定"><span class="nav-number">2.</span> <span class="nav-text">参数绑定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#继承特性"><span class="nav-number">3.</span> <span class="nav-text">继承特性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#优点和缺点"><span class="nav-number">3.1.</span> <span class="nav-text">优点和缺点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ribbon配置"><span class="nav-number">4.</span> <span class="nav-text">Ribbon配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#全局配置"><span class="nav-number">4.1.</span> <span class="nav-text">全局配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#指定服务配置"><span class="nav-number">4.2.</span> <span class="nav-text">指定服务配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#重试机制"><span class="nav-number">4.3.</span> <span class="nav-text">重试机制</span></a></li></ol></li></ol></div>
             
 
           </div>
