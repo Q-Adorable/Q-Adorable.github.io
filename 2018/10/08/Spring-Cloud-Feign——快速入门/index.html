@@ -88,7 +88,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2018/10/08/Spring-Cloud-Feign——快速入门/1.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/08/Spring-Cloud-Feign——快速入门/2.png">
-<meta property="og:updated_time" content="2018-10-17T09:22:52.418Z">
+<meta property="og:updated_time" content="2018-10-17T09:29:52.690Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Cloud Feign——快速入门">
 <meta name="twitter:description" content="基于Netflix Feign实现，整合了Ribbon与Hystrix，除了提供这两者的强大功能外，还提供了一种声明式的Web服务客户端定义方式。只需要创建一个接口并用注解的方式来配置它，即可完成对服务提供方的接口绑定，简化了在使用Ribbon时自行封装服务调用客户端的开发量。Feign具备可插拔的注解支持，包括Feign注解和JAX-RS注解。 快速入门 创建工程(feign-consumer)">
@@ -393,8 +393,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">error</span><br><span class="line">name=未知, age=0</span><br><span class="line">error</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>如果报错：<code>&lt;font color=&quot;red&quot;&gt;com.netflix.client.ClientException: Load balancer does not have available server for client: hello-service 
-&lt;/font&gt;</code><br>可能原因有两个：</p>
+<p>如果报错：&lt;font color=”red”&gt;com.netflix.client.ClientException: Load balancer does not have available server for client: hello-service<br>&lt;/font&gt;<br>可能原因有两个：</p>
 <ol>
 <li>Feign对Hystrix的支持默认是关闭的，如果想开启对Hystrix的支持，需要在application.yml中添加：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">feign:</span><br><span class="line">  hystrix:</span><br><span class="line">    enabled: true</span><br></pre></td></tr></table></figure>
 </li>
@@ -404,7 +403,8 @@
 <li>如果按照上面做了，还不生效，可能是上一节中禁用了Hystrix，禁用实现类：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Configuration</span><br><span class="line">public class DisableHystrixConfiguration &#123;</span><br><span class="line">    @Bean</span><br><span class="line">    @Scope(&quot;prototype&quot;)</span><br><span class="line">    public Feign.Builder feignBuilder() &#123;</span><br><span class="line">        return Feign.builder();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>这个类是通过使用@Scope(“prototype”)注解为指定的客户端配置Feign.Builder实例，从而构建一个关闭Hytrix的配置类，接下来就是在HelloService的@FeignClient注解中，通过configuration参数引入上面实现的配置：<br><code>@FeignClient(name = &quot;hello-service&quot;, configuration = DisableHystrixConfiguration.class)</code><br>现在我们想测试服务降级配置，所以开启对Hystrix的支持，然后认为把@FeignClient注解中的configuration参数去掉就行了，结果还是报上面的错。<br>原因就是写的那个配置类DisableHystrixConfiguration上面还有@Configuration注解，就算在@FeignClient注解中没有引用该配置类，他也会被启动类上的注解扫描到，所以这里把@Configuration注释掉，或者删除DisableHystrixConfiguration类。<br>附：Spring Boot 与Spring Cloud版本对应关系图<br><img src="/2018/10/08/Spring-Cloud-Feign——快速入门/2.png"></p>
+<p>这个类是通过使用@Scope(“prototype”)注解为指定的客户端配置Feign.Builder实例，从而构建一个关闭Hytrix的配置类，接下来就是在HelloService的@FeignClient注解中，通过configuration参数引入上面实现的配置：<br><code>@FeignClient(name = &quot;hello-service&quot;, configuration = DisableHystrixConfiguration.class)</code><br>现在我们想测试服务降级配置，所以开启对Hystrix的支持，然后认为把@FeignClient注解中的configuration参数去掉就行了，结果还是报上面的错。<br>原因就是写的那个配置类DisableHystrixConfiguration上面还有@Configuration注解，就算在@FeignClient注解中没有引用该配置类，他也会被启动类上的注解扫描到，所以这里把@Configuration注释掉，或者删除DisableHystrixConfiguration类。</p>
+<p>附：Spring Boot 与Spring Cloud版本对应关系图<br><img src="/2018/10/08/Spring-Cloud-Feign——快速入门/2.png"></p>
 
       
     </div>
