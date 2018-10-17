@@ -88,7 +88,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2018/10/08/Spring-Cloud-Feign——快速入门/1.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/08/Spring-Cloud-Feign——快速入门/2.png">
-<meta property="og:updated_time" content="2018-10-17T09:29:52.690Z">
+<meta property="og:updated_time" content="2018-10-17T15:23:54.977Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Cloud Feign——快速入门">
 <meta name="twitter:description" content="基于Netflix Feign实现，整合了Ribbon与Hystrix，除了提供这两者的强大功能外，还提供了一种声明式的Web服务客户端定义方式。只需要创建一个接口并用注解的方式来配置它，即可完成对服务提供方的接口绑定，简化了在使用Ribbon时自行封装服务调用客户端的开发量。Feign具备可插拔的注解支持，包括Feign注解和JAX-RS注解。 快速入门 创建工程(feign-consumer)">
@@ -393,9 +393,9 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">error</span><br><span class="line">name=未知, age=0</span><br><span class="line">error</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>如果报错：&lt;font color=”red”&gt;com.netflix.client.ClientException: Load balancer does not have available server for client: hello-service<br>&lt;/font&gt;<br>可能原因有两个：</p>
+<p>如果报错：</p><p style="color:red">com.netflix.client.ClientException: Load balancer does not have available server for client: hello-service<br></p><br>可能原因有两个：<p></p>
 <ol>
-<li>Feign对Hystrix的支持默认是关闭的，如果想开启对Hystrix的支持，需要在application.yml中添加：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">feign:</span><br><span class="line">  hystrix:</span><br><span class="line">    enabled: true</span><br></pre></td></tr></table></figure>
+<li>在一些SpringCloud版本中，Feign对Hystrix的支持默认是关闭的，如果想开启对Hystrix的支持，需要在application.yml中添加：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">feign:</span><br><span class="line">  hystrix:</span><br><span class="line">    enabled: true</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 <p>在Dalston版本中(1.5)，还需要引入hystrix依赖<br><code>implementation(&#39;org.springframework.cloud:spring-cloud-starter-netflix-hystrix&#39;)</code></p>
