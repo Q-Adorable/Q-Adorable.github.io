@@ -89,7 +89,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/10/08/Spring-Cloud-Feign——快速入门/1.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/08/Spring-Cloud-Feign——快速入门/2.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/08/Spring-Cloud-Feign——快速入门/3.png">
-<meta property="og:updated_time" content="2018-10-18T03:45:40.689Z">
+<meta property="og:updated_time" content="2018-10-18T04:15:33.127Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Cloud Feign——快速入门">
 <meta name="twitter:description" content="基于Netflix Feign实现，整合了Ribbon与Hystrix，除了提供这两者的强大功能外，还提供了一种声明式的Web服务客户端定义方式。只需要创建一个接口并用注解的方式来配置它，即可完成对服务提供方的接口绑定，简化了在使用Ribbon时自行封装服务调用客户端的开发量。Feign具备可插拔的注解支持，包括Feign注解和JAX-RS注解。 快速入门 创建工程(feign-consumer)">
@@ -417,6 +417,13 @@
 </li>
 </ol>
 <p>访问<a href="http://localhost:9001/feign-consumer" target="_blank" rel="noopener">http://localhost:9001/feign-consumer</a> 接口，控制台可以看到以下请求详细日志：<br><img src="/2018/10/08/Spring-Cloud-Feign——快速入门/3.png"></p>
+<p>对于Feign的Logger级别主要有下面4类</p>
+<ul>
+<li>NONE：不记录任何信息。</li>
+<li>BASIC：仅记录请求方法、URL以及响应状态码和执行时间。</li>
+<li>HEADERS：除了记录BASIC级别信息外，还会记录请求和响应的头信息。</li>
+<li>FULL：记录所有请求与响应的明细，包括头信息、请求体、元数据等。</li>
+</ul>
 
       
     </div>
