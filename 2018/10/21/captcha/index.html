@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Adorable">
 <meta property="og:description" content="验证码是什么验证码（captcha）一种能自动区分计算机和人类用户的公开图灵测试（Completely AutomatedPublic Turing test to tell Computers and Humans Apart, CAPTCHA），它的生成和评测都不需要人的干预，底层数据库和算法公开，人类很容易通过但计算机程序几乎不能通过。最早出现在雅虎，是为了解决自己和用户们每天遇到的垃圾邮件">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-10-21T15:39:33.293Z">
+<meta property="og:updated_time" content="2018-10-24T15:53:31.368Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="captcha">
 <meta name="twitter:description" content="验证码是什么验证码（captcha）一种能自动区分计算机和人类用户的公开图灵测试（Completely AutomatedPublic Turing test to tell Computers and Humans Apart, CAPTCHA），它的生成和评测都不需要人的干预，底层数据库和算法公开，人类很容易通过但计算机程序几乎不能通过。最早出现在雅虎，是为了解决自己和用户们每天遇到的垃圾邮件">
@@ -301,6 +301,33 @@
       
         <h4 id="验证码是什么"><a href="#验证码是什么" class="headerlink" title="验证码是什么"></a>验证码是什么</h4><p>验证码（captcha）一种能自动区分计算机和人类用户的公开图灵测试（Completely AutomatedPublic Turing test to tell Computers and Humans Apart, CAPTCHA），它的生成和评测都不需要人的干预，底层数据库和算法公开，人类很容易通过但计算机程序几乎不能通过。最早出现在雅虎，是为了解决自己和用户们每天遇到的垃圾邮件轰炸问题。</p>
 <h4 id="验证码有什么用"><a href="#验证码有什么用" class="headerlink" title="验证码有什么用"></a>验证码有什么用</h4><p>在<font color="#FF4500">网站安全</font>方面，它防止程序进行垃圾注册滥用资源，防止恶意登录和账号盗用，为用户的账号安全提供保障。<br>在<font color="#FF4500">数据安全</font>方面，验证码作为阻挡数据爬取、防止数据被破坏的一道屏障起了重要作用。<br>在<font color="#FF4500">运营安全</font>方面，它阻碍恶意刷单现象、防止虚假秒杀、虚假评论，保障投票结果的真实性。<br>在<font color="#FF4500">交易安全</font>方面，它阻挡虚假交易、恶意套现、盗卡支付等行为，为交易支付保驾护航。</p>
+<h4 id="kaptcha简介"><a href="#kaptcha简介" class="headerlink" title="kaptcha简介"></a>kaptcha简介</h4><p>kaptcha 是一个很有用的验证码生成工具，由于它有许多可配置项，所以用它可以简单快捷的生成各式各样的验证码。</p>
+<h4 id="开发工具及使用的核心技术"><a href="#开发工具及使用的核心技术" class="headerlink" title="开发工具及使用的核心技术"></a>开发工具及使用的核心技术</h4><ol>
+<li>IntelliJ IDEA</li>
+<li>Spring Boot</li>
+<li>React</li>
+<li>kaptcha<h4 id="快速入门"><a href="#快速入门" class="headerlink" title="快速入门"></a>快速入门</h4></li>
+<li>添加依赖<br><code>compile(&quot;com.github.penggle:kaptcha:2.3.2&quot;)</code></li>
+<li><p>配置kaptcha</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">@Configuration</span><br><span class="line">public class KaptchaConfig &#123;</span><br><span class="line">    @Bean</span><br><span class="line">    public DefaultKaptcha getDefaultKaptcha()&#123;</span><br><span class="line">        DefaultKaptcha captchaProducer = new DefaultKaptcha();</span><br><span class="line">        Properties properties = new Properties();</span><br><span class="line">        properties.setProperty(&quot;kaptcha.border&quot;, &quot;no&quot;);</span><br><span class="line">        properties.setProperty(&quot;kaptcha.textproducer.font.color&quot;, &quot;blue&quot;);</span><br><span class="line">        properties.setProperty(&quot;kaptcha.textproducer.font.size&quot;, &quot;30&quot;);</span><br><span class="line">        properties.setProperty(&quot;kaptcha.image.width&quot;, &quot;110&quot;);</span><br><span class="line">        properties.setProperty(&quot;kaptcha.image.height&quot;, &quot;40&quot;);</span><br><span class="line">        properties.setProperty(&quot;kaptcha.session.key&quot;, &quot;code&quot;);</span><br><span class="line">        properties.setProperty(&quot;kaptcha.textproducer.char.length&quot;, &quot;4&quot;);</span><br><span class="line">        properties.setProperty(&quot;kaptcha.textproducer.font.names&quot;, &quot;宋体,楷体,微软雅黑&quot;);</span><br><span class="line">        Config config = new Config(properties);</span><br><span class="line">        captchaProducer.setConfig(config);</span><br><span class="line">        return captchaProducer;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编写controller用于生成验证码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">public class CodeController &#123;</span><br><span class="line">    @Autowired</span><br><span class="line">    private Producer captchaProducer;</span><br><span class="line">    public static String code = &quot;&quot;;</span><br><span class="line">    @GetMapping(&quot;/kaptcha&quot;)</span><br><span class="line">    public void getKaptchaImage(HttpServletResponse response) throws Exception &#123;</span><br><span class="line">        response.setDateHeader(&quot;Expires&quot;, 0);</span><br><span class="line">        response.setHeader(&quot;Cache-Control&quot;, &quot;no-store, no-cache, must-revalidate&quot;);</span><br><span class="line">        response.addHeader(&quot;Cache-Control&quot;, &quot;post-check=0, pre-check=0&quot;);</span><br><span class="line">        response.setHeader(&quot;Pragma&quot;, &quot;no-cache&quot;);</span><br><span class="line">        response.setContentType(&quot;image/jpeg&quot;);</span><br><span class="line">        code = captchaProducer.createText();</span><br><span class="line">        BufferedImage bi = captchaProducer.createImage(code);</span><br><span class="line">        ServletOutputStream out = response.getOutputStream();</span><br><span class="line">        ImageIO.write(bi, &quot;jpg&quot;, out);</span><br><span class="line">        try &#123;</span><br><span class="line">            out.flush();</span><br><span class="line">        &#125; finally &#123;</span><br><span class="line">            out.close();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>注：在这个controller中注入第2步中配置的那个bean，然后就可以使用它生成验证码并保存在静态变量code中，以及向客户端输出图片类型的验证码;</p>
+<ol start="4">
+<li>验证码对比工具<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class CodeUtil &#123;</span><br><span class="line">    public static boolean checkVerifyCode(String verifyCodeActual) &#123;</span><br><span class="line">        if(CodeController.code==null || CodeController.code.equals(&quot;&quot;))</span><br><span class="line">            return false;</span><br><span class="line">        if (!verifyCodeActual.equals(CodeController.code)) &#123;</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>注：这个类用来比对生成的验证码与用户输入的验证码是否一致。</p>
+<ol start="5">
+<li><p>使用验证码登陆<br>在/login接口中，验证用户前调用第4步工具类判断验证码是否一致</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if (!CodeUtil.checkVerifyCode(request.getCaptcha())) &#123;</span><br><span class="line">    throw new UserException(&quot;验证码错误&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>验证码前端使用<br><code>&lt;img alt=&quot;点击更换&quot; title=&quot;点击更换&quot; src=&quot;http://localhost:8080/kaptcha&quot; /&gt;</code><br>注：因为进行了前后端服务拆分，所以此处src为本地图片验证码生产接口。</p>
+</li>
+</ol>
 
       
     </div>
@@ -414,7 +441,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -451,7 +478,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#验证码是什么"><span class="nav-number">1.</span> <span class="nav-text">验证码是什么</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#验证码有什么用"><span class="nav-number">2.</span> <span class="nav-text">验证码有什么用</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#验证码是什么"><span class="nav-number">1.</span> <span class="nav-text">验证码是什么</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#验证码有什么用"><span class="nav-number">2.</span> <span class="nav-text">验证码有什么用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#kaptcha简介"><span class="nav-number">3.</span> <span class="nav-text">kaptcha简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#开发工具及使用的核心技术"><span class="nav-number">4.</span> <span class="nav-text">开发工具及使用的核心技术</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#快速入门"><span class="nav-number">5.</span> <span class="nav-text">快速入门</span></a></li></ol></div>
             
 
           </div>
